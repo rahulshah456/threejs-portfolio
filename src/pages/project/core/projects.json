@@ -1,0 +1,614 @@
+{
+  "projects": [
+    {
+      "id": "project-one",
+      "name": "Web3D",
+      "description": "An innovative web application showcasing modern design and functionality",
+      "tags": ["React", "TypeScript", "Three.js", "Vite", "GSAP"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "3D in Your Browser",
+          "message": "Load models, run simulations, place them on maps, and share instantly—no installs, no heavy software, just smooth real-time interaction.",
+          "mediaUrl": "https://knjgjtsrxvtjuafugtve.supabase.co/storage/v1/object/sign/assets/web3d/01.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZjgwNTEzOS1jOGQwLTQzOWYtYTcxMy0xOTk4MDI5MzRiYmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvd2ViM2QvMDEubXA0IiwiaWF0IjoxNzc0ODE5NzA3LCJleHAiOjE4MDYzNTU3MDd9.wG_RfdQZ0n_-7R1fRGlKaGbWIkOVipCPzRq_qFouAoA",
+          "type": "video",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "Drop Any 3D Model In",
+          "message": "From simple assets to complex designs, import any model and instantly explore, interact, and build on top of it without friction.",
+          "mediaUrl": "https://knjgjtsrxvtjuafugtve.supabase.co/storage/v1/object/sign/assets/web3d/02.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82ZjgwNTEzOS1jOGQwLTQzOWYtYTcxMy0xOTk4MDI5MzRiYmYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvd2ViM2QvMDIud2VicCIsImlhdCI6MTc3NDgxOTczNiwiZXhwIjoxODA2MzU1NzM2fQ.ZJFLglEUi_rzvR3J8lLqMC-bvf5eNSq9hRodLnJaQjQ",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "Make Every Point Interactive",
+          "message": "Attach info, videos, links, or live data to precise points in your scene—turning static models into rich, interactive experiences.",
+          "mediaUrl": "/assets/project/one/one-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "Control the Entire Atmosphere",
+          "message": "Switch between day and night, add rain, snow, fog, or storms, and fine-tune every environmental detail in real time.",
+          "mediaUrl": "/assets/project/one/one-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Light It Your Way",
+          "message": "Adjust sun position, intensity, shadows, and individual model lighting to achieve the exact mood, realism, and visual clarity you need.",
+          "mediaUrl": "/assets/project/one/one-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "Animate Without Limits",
+          "message": "Create smooth motion, layered animations, and large-scale simulations like traffic or crowds—optimized for performance using instancing.",
+          "mediaUrl": "/assets/project/one/one-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 7,
+          "header": "Built for Real-World Placement",
+          "message": "Place models using real coordinates, visualize GeoJSON data, and build location-aware scenes with terrain and map integrations.",
+          "mediaUrl": "/assets/project/one/one-7.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 8,
+          "header": "Explore Every Angle",
+          "message": "Walk through scenes, inspect details, or use cinematic camera modes to automatically showcase your environment with smooth motion.",
+          "mediaUrl": "/assets/project/one/one-8.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 9,
+          "header": "Open Anywhere, Instantly",
+          "message": "Your entire 3D scene is just a link away—open, explore, and interact on any device exactly as it was designed.",
+          "mediaUrl": "/assets/project/one/one-9.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "project-two",
+      "name": "360Viewer",
+      "description": "A creative digital experience with immersive visuals and interactions",
+      "tags": ["React", "TypeScript", "WebGL", "Tailwind CSS", "Embla Carousel"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "360° Site Views, Fully Interactive",
+          "message": "Capture real-world scenes and turn them into interactive 360 experiences—organized, mapped, and ready to explore from anywhere.",
+          "mediaUrl": "/assets/project/two/two-1.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "From Camera to Platform in Seconds",
+          "message": "Import 360 images directly from your workflow and start working instantly—no complex transfers, no scattered files, just everything in one place.",
+          "mediaUrl": "/assets/project/two/two-2.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "Add Context Exactly Where It Matters",
+          "message": "Place hotspots inside 360 scenes with info, videos, or links—making every location clear, detailed, and easy to understand.",
+          "mediaUrl": "/assets/project/two/two-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "Connect Scenes Into Seamless 360 Tours",
+          "message": "Link multiple 360 images together to create guided walkthroughs—navigate spaces naturally as if you were actually there.",
+          "mediaUrl": "/assets/project/two/two-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Every Scene Placed on the Map",
+          "message": "Auto-link images with latitude and longitude, visualize them on maps, and navigate projects spatially with full geographic context.",
+          "mediaUrl": "/assets/project/two/two-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "All Your Project Assets, Organized",
+          "message": "Manage images, scenes, and related data from a single place—structured, searchable, and always accessible when needed.",
+          "mediaUrl": "/assets/project/two/two-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 7,
+          "header": "Control Who Sees What",
+          "message": "Assign roles across projects and control access with precision—ensuring the right people see the right data at the right time.",
+          "mediaUrl": "/assets/project/two/two-7.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 8,
+          "header": "Built for Faster Site-to-Office Workflows",
+          "message": "Bridge the gap between field capture and analysis—reduce back-and-forth and make every update instantly visible.",
+          "mediaUrl": "/assets/project/two/two-8.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 9,
+          "header": "Open Anywhere, Instantly",
+          "message": "Turn your 360 projects into shareable links—explore, navigate, and review from any device without extra tools.",
+          "mediaUrl": "/assets/project/two/two-9.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "project-three",
+      "name": "DIM DOCKS",
+      "description": "A comprehensive platform for managing users, services, and access across your software ecosystem",
+      "tags": ["React", "TypeScript", "Authentication", "RBAC", "Multi-tenant"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "All Your Apps. One Login. Full Control.",
+          "message": "Manage users, roles, and subscriptions across every service from a single platform—built to stay organized as your system grows.",
+          "mediaUrl": "/assets/project/one/one-1.mp4",
+          "type": "video",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "One Login Across Everything You Use",
+          "message": "Sign in once and move across all connected services instantly—no repeated logins, no friction, just a smooth, unified experience.",
+          "mediaUrl": "/assets/project/one/one-2.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "All Your Services, Finally in Sync",
+          "message": "Connect and manage multiple applications in one system—control access, plans, and usage without switching between tools.",
+          "mediaUrl": "/assets/project/one/one-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "Organized by Teams, Projects, and Workflows",
+          "message": "Structure everything the way teams actually operate—organizations, projects, services, and users, all clearly connected and easy to manage.",
+          "mediaUrl": "/assets/project/one/one-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Precision Access, Without the Complexity",
+          "message": "Create custom roles across services and projects, ensuring every user gets exactly the right level of access—clean and controlled.",
+          "mediaUrl": "/assets/project/one/one-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "Control at Every Level, From One Dashboard",
+          "message": "Manage organizations, projects, users, and subscriptions with full visibility—whether at team level or across the entire system.",
+          "mediaUrl": "/assets/project/one/one-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 7,
+          "header": "Onboard and Launch Services Without the Chaos",
+          "message": "Bring new services live with structured setup, dynamic configurations, and managed deployments—all handled smoothly in one place.",
+          "mediaUrl": "/assets/project/one/one-7.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 8,
+          "header": "Scale Users Without Losing Control",
+          "message": "Add users in bulk, assign roles instantly, and manage access across projects and services while keeping everything structured.",
+          "mediaUrl": "/assets/project/one/one-8.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 9,
+          "header": "Manage Everything, From Anywhere",
+          "message": "Fully responsive and WCAG-friendly—access your system from any device, ensuring smooth control and usability for every user.",
+          "mediaUrl": "/assets/project/one/one-9.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "project-four",
+      "name": "PASSAD",
+      "description": "A comprehensive access control platform for managing entry across multiple properties and facilities",
+      "tags": ["Access Control", "IoT", "RFID", "Multi-tenant", "Security"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "Control Access to Every Space, Instantly",
+          "message": "Manage who enters where and when across buildings, rooms, and facilities—using digital keyrings, real-time control, and zero friction.",
+          "mediaUrl": "/assets/project/two/two-1.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "Access That Adapts to Every Situation",
+          "message": "Grant permanent or time-based access for residents, guests, or workers—precise control without manual tracking or confusion.",
+          "mediaUrl": "/assets/project/two/two-2.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "All Your Properties, One Control System",
+          "message": "Manage access across hotels, societies, offices, or sites—keep every building, floor, and room connected and under control.",
+          "mediaUrl": "/assets/project/two/two-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "Physical Entry, Digitally Controlled",
+          "message": "Issue and manage RFID cards or keyrings with full control—activate, update, or revoke access instantly from anywhere.",
+          "mediaUrl": "/assets/project/two/two-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Clear Roles. Smooth Operations.",
+          "message": "From admins to on-ground staff, every role has defined control—ensuring secure access management without overlap or risk.",
+          "mediaUrl": "/assets/project/two/two-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "Control More Than Just Entry Points",
+          "message": "Manage InfoScreens across locations—display announcements, videos, or live updates directly within your buildings.",
+          "mediaUrl": "/assets/project/two/two-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 7,
+          "header": "Secure, Scalable, and Always Reliable",
+          "message": "Powered by a modern architecture with role-based security and SSO—built to handle complex systems without compromise.",
+          "mediaUrl": "/assets/project/two/two-7.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "project-five",
+      "name": "SMART SEVAK",
+      "description": "A smart shop management platform with WhatsApp-based ordering for local businesses",
+      "tags": ["WhatsApp", "E-commerce", "Order Management", "Mobile", "React"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "Run Your Shop from One Smart App",
+          "message": "Manage orders, pricing, and daily operations from one place—while customers order instantly on WhatsApp, just like they already do.",
+          "mediaUrl": "/assets/project/two/two-1.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "Built for Daily Shop Operations",
+          "message": "Handle orders, update prices, manage inventory, and track payments—designed for fast-moving local businesses and growing shops.",
+          "mediaUrl": "/assets/project/two/two-2.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "Let Customers Order the Easy Way",
+          "message": "Customers scan a QR or tap a link to order on WhatsApp—no new apps, no confusion, just a simple and familiar experience.",
+          "mediaUrl": "/assets/project/two/two-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "Turn Chats into Real Orders",
+          "message": "Convert WhatsApp messages into structured orders—accept, reject, or reply directly without juggling multiple chats.",
+          "mediaUrl": "/assets/project/two/two-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Understand What Drives Your Sales",
+          "message": "See what customers order, when they return, and what works best—so you can grow smarter without guesswork.",
+          "mediaUrl": "/assets/project/two/two-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "Stay Connected with Your Customers",
+          "message": "Send reminders, updates, and offers on WhatsApp—keeping your shop active and top of mind every day.",
+          "mediaUrl": "/assets/project/two/two-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "id": "project-six",
+      "name": "LIVE SLIDER",
+      "description": "A lightweight mobile wallpaper app with gyro-based parallax motion and smart battery optimization",
+      "tags": ["React Native", "Android", "Parallax", "Mobile", "Wallpaper"],
+      "pages": [
+        {
+          "number": 1,
+          "header": "Your Wallpaper, Now in Motion",
+          "message": "Turn static images into smooth, responsive wallpapers that move with your phone—lightweight, fluid, and built to feel natural.",
+          "mediaUrl": "/assets/project/one/one-1.mp4",
+          "type": "video",
+          "showVignette": true,
+          "showButtons": true,
+          "buttons": [
+            {
+              "text": "View Demo",
+              "icon": "play-circle",
+              "isPrimary": true,
+              "buttonType": "link",
+              "url": "https://example.com/demo",
+              "disabled": false
+            },
+            {
+              "text": "Case Study",
+              "icon": "file-text",
+              "isPrimary": false,
+              "buttonType": "link",
+              "url": "https://example.com/case-study",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "header": "Feel Every Tilt",
+          "message": "Your wallpaper responds to every movement using gyro-based parallax—creating depth and motion that feels real, not forced.",
+          "mediaUrl": "/assets/project/one/one-2.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 3,
+          "header": "Built to Save Battery, Not Drain It",
+          "message": "Optimized to run light, match device performance, and even switch to static mode on low battery—so you never have to worry.",
+          "mediaUrl": "/assets/project/one/one-3.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 4,
+          "header": "More Than One Wallpaper",
+          "message": "Use a single image or create a slideshow that changes on double tap—keeping your screen fresh without extra effort.",
+          "mediaUrl": "/assets/project/one/one-4.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 5,
+          "header": "Motion That Adapts to You",
+          "message": "Choose from multiple rotation modes that control how your wallpaper moves—whether fixed, directional, or fully dynamic.",
+          "mediaUrl": "/assets/project/one/one-5.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        },
+        {
+          "number": 6,
+          "header": "Small, Fast, and Fully Yours",
+          "message": "Barely 3MB, runs locally with no login or tracking—just smooth performance, full privacy, and support across devices.",
+          "mediaUrl": "/assets/project/one/one-6.jpg",
+          "type": "image",
+          "showVignette": true,
+          "showButtons": false,
+          "buttons": []
+        }
+      ]
+    }
+  ]
+}
