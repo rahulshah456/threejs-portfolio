@@ -111,48 +111,29 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
 
   const renderContentInfo = () => {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          padding: 'clamp(1rem, 4vw, 4rem)',
-          width: '100%',
-          userSelect: 'none',
-        }}
-      >
+      <div style={styles.contentInfo}>
         <span
           style={{
+            ...styles.pageNumberText,
             fontSize: isTablet ? 'clamp(2.4rem, 7.2vw, 6.4rem)' : 'clamp(2.4rem, 8vw, 6.4rem)',
-            color: pageData.page_number === 1 ? 'white' : 'white',
-            fontWeight: '900',
-            fontFamily: 'Valorax',
-            lineHeight: '1',
-            opacity: pageData.page_number === 1 ? 0.25 : 0.25,
-            // textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)',
-            // WebkitTextStroke: `5px ${token.colorPrimary}`,
           }}
         >
-          {pageData.page_number === 1 ? projectName : String(pageData.page_number).padStart(2, '0')}
+          {String(pageData.page_number).padStart(2, '0')}
         </span>
         <span
           style={{
+            ...styles.headerText,
             fontSize: isTablet ? 'clamp(1rem, 2.4vw, 2.4rem)' : 'clamp(1rem, 3.2vw, 2.4rem)',
-            color: 'white',
-            fontWeight: '900',
-            fontFamily: 'Valorax',
           }}
         >
           {pageData.header}
         </span>
         <span
           style={{
+            ...styles.messageText,
             fontSize: isTablet
               ? 'clamp(0.525rem, 1.2vw, 1.2rem)'
               : 'clamp(0.525rem, 1.5vw, 1.2rem)',
-            fontWeight: '500',
-            width: '90%',
-            color: 'rgba(255, 255, 255, 0.75)',
           }}
         >
           {pageData.message}
@@ -163,35 +144,38 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
   };
 
   return (
-    <div style={styles.imageCard}>
-      {isVideoContent ? (
-        <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
-          <video
-            ref={videoRef}
-            src={mediaPath}
-            controls
-            loop
-            muted
-            playsInline
-            style={{ ...styles.video, width: '100%', height: '100%' }}
-          >
-            Your browser does not support the video tag.
-          </video>
-          {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
-          <div style={styles.contentOverlay}>{renderContentInfo()}</div>
-        </div>
-      ) : (
-        <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
-          <img
-            src={pageData.media_path ?? ''}
-            alt={pageData.header}
-            loading="lazy"
-            style={{ ...styles.image, width: '100%', height: '100%' }}
-          />
-          {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
-          <div style={styles.contentOverlay}>{renderContentInfo()}</div>
-        </div>
-      )}
+    <div style={styles.cardWrapper}>
+      {pageData.page_number === 1 && <div style={styles.projectNameTab}>{projectName}</div>}
+      <div style={styles.imageCard}>
+        {isVideoContent ? (
+          <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
+            <video
+              ref={videoRef}
+              src={mediaPath}
+              controls
+              loop
+              muted
+              playsInline
+              style={styles.video}
+            >
+              Your browser does not support the video tag.
+            </video>
+            {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
+            <div style={styles.contentOverlay}>{renderContentInfo()}</div>
+          </div>
+        ) : (
+          <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
+            <img
+              src={pageData.media_path ?? ''}
+              alt={pageData.header}
+              loading="lazy"
+              style={styles.image}
+            />
+            {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
+            <div style={styles.contentOverlay}>{renderContentInfo()}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

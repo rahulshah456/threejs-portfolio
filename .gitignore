@@ -29,6 +29,9 @@ build/
 .DS_Store
 Thumbs.db
 
+# 3D assets (large binary files)
+public/assets/3d/
+
 # TypeScript
 *.tsbuildinfo
 

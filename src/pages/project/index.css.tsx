@@ -7,8 +7,7 @@ const styles: CSSInterface = {
   container: {
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#111',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -26,10 +25,11 @@ const styles: CSSInterface = {
   carouselWrapper: {
     maxWidth: '100%',
     position: 'relative',
+    // background: 'green',
     zIndex: 1,
   },
   carouselViewport: {
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   slidesTrack: {
     display: 'flex',
@@ -44,12 +44,34 @@ const styles: CSSInterface = {
   imageCard: {
     overflow: 'hidden',
     borderRadius: '1rem',
+    position: 'relative',
+    zIndex: 2,
+    boxShadow: '0 -8px 24px 4px rgba(0, 0, 0, 0.5)',
+  },
+  cardWrapper: {
+    position: 'relative',
+  },
+  projectNameTab: {
+    background: '#ff0000',
+    color: 'white',
+    position: 'absolute',
+    top: '0',
+    left: '2rem',
+    zIndex: 1,
+    fontSize: 'clamp(0.875rem, 1.25vw, 1.25rem)',
+    padding: '0.25rem 4rem',
+    borderRadius: '0.5rem 0.5rem 0 0',
+    transform: 'translateX(0) translateY(-100%)',
+    whiteSpace: 'nowrap',
+    boxShadow: '0 6px 12px 4px rgba(0, 0, 0, 0.6)',
   },
   image: {
     objectFit: 'cover',
     pointerEvents: 'none',
     userSelect: 'none',
     borderRadius: '1rem',
+    width: '100%',
+    height: '100%',
   },
   video: {
     objectFit: 'cover',
@@ -57,6 +79,8 @@ const styles: CSSInterface = {
     userSelect: 'none',
     transform: 'scale(1.1)',
     borderRadius: '1rem',
+    width: '100%',
+    height: '100%',
   },
   videoWrapper: {
     position: 'relative',
@@ -148,6 +172,31 @@ const styles: CSSInterface = {
     fontSize: 'clamp(1rem, 2vw, 1.2rem)',
     display: 'flex',
     alignItems: 'center',
+  },
+  contentInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: 'clamp(1rem, 4vw, 4rem)',
+    width: '100%',
+    userSelect: 'none',
+  },
+  pageNumberText: {
+    color: 'white',
+    fontWeight: '900',
+    fontFamily: 'Valorax',
+    lineHeight: '1',
+    opacity: 0.25,
+  },
+  headerText: {
+    color: 'white',
+    fontWeight: '900',
+    fontFamily: 'Valorax',
+  },
+  messageText: {
+    fontWeight: '500',
+    width: '90%',
+    color: 'rgba(255, 255, 255, 0.75)',
   },
 };
 
