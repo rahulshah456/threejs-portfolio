@@ -24,6 +24,10 @@ const City = () => {
   const uSpeed = 0.001;
   let createCarPos = true;
 
+  const isDragging = useRef(false);
+  const lastDrag = useRef(new THREE.Vector2());
+  const dragRotation = useRef(new THREE.Euler());
+
   /* ------------------ Init City ------------------ */
   useEffect(() => {
     const town = townRef.current;
@@ -136,9 +140,36 @@ const City = () => {
     const onMove = (e: MouseEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      if (isDragging.current) {
+        const dx = e.clientX - lastDrag.current.x;
+        const dy = e.clientY - lastDrag.current.y;
+        dragRotation.current.y += dx * 0.005;
+        dragRotation.current.x += dy * 0.005;
+        dragRotation.current.x = THREE.MathUtils.clamp(dragRotation.current.x, -0.05, 1);
+        lastDrag.current.set(e.clientX, e.clientY);
+      }
     };
+
+    const onDown = (e: MouseEvent) => {
+      isDragging.current = true;
+      lastDrag.current.set(e.clientX, e.clientY);
+      const city = cityRef.current;
+      dragRotation.current.set(city.rotation.x, city.rotation.y, city.rotation.z);
+    };
+
+    const onUp = () => {
+      isDragging.current = false;
+    };
+
     window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
+    window.addEventListener('mousedown', onDown);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mousedown', onDown);
+      window.removeEventListener('mouseup', onUp);
+    };
   }, []);
 
   /* ------------------ Animate ------------------ */
@@ -146,10 +177,14 @@ const City = () => {
     const city = cityRef.current;
     const smoke = smokeRef.current;
 
-    city.rotation.y -= (mouse.current.x * 8 - camera.rotation.y) * uSpeed;
-    city.rotation.x -= (-(mouse.current.y * 2) - camera.rotation.x) * uSpeed;
-
-    city.rotation.x = THREE.MathUtils.clamp(city.rotation.x, -0.05, 1);
+    if (isDragging.current) {
+      city.rotation.x = dragRotation.current.x;
+      city.rotation.y = dragRotation.current.y;
+    } else {
+      city.rotation.y -= (mouse.current.x * 8 - camera.rotation.y) * uSpeed;
+      city.rotation.x -= (-(mouse.current.y * 2) - camera.rotation.x) * uSpeed;
+      city.rotation.x = THREE.MathUtils.clamp(city.rotation.x, -0.05, 1);
+    }
 
     smoke.rotation.x += 0.01;
     smoke.rotation.y += 0.01;
