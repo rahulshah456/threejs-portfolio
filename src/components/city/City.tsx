@@ -4,7 +4,9 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useTheme } from '../custom-hooks/useTheme';
 import { usePlayMode } from '../../store/playModeStore';
+import { useProjectStore } from '../../store/projectStore';
 import { buildings } from './cityData';
+import ProjectTile from './ProjectTile';
 
 /* ------------------ Utils ------------------ */
 
@@ -15,13 +17,16 @@ const mathRandom = (num = 8) => -Math.random() * num + Math.random() * num;
 const DARK = {
   building: 0x000000,
   buildingRoughness: 1,
-  buildingMetalness: 0,
+  buildingMetalness: 0.2,
   wire: 0xffffff,
-  wireOpacity: 0.03,
+  wireOpacity: 0.1,
   ground: 0x000000,
   groundShininess: 10,
   groundSpecular: 0x111111,
-  gridLines: 0x000000,
+  gridLines: 0x44444e,
+  gridCenter: 0xff0000,
+  smokeParticles: 0xffff00,
+  cars: 0xffff00,
 } as const;
 
 const LIGHT = {
@@ -34,12 +39,9 @@ const LIGHT = {
   groundShininess: 120,
   groundSpecular: 0xc8bfb0,
   gridLines: 0xcfab8d,
-} as const;
-
-const ACCENT = {
-  gridCenter: 0xff0000,
-  smokeParticles: 0xffff00,
-  cars: 0xffff00,
+  gridCenter: 0xffff00,
+  smokeParticles: 0xff0000,
+  cars: 0xff0000,
 } as const;
 
 const City = () => {
@@ -49,14 +51,16 @@ const City = () => {
   const groundRef = useRef<THREE.Mesh | null>(null);
   const gridRef = useRef<THREE.GridHelper | null>(null);
   const cityGroupRef = useRef<THREE.Group | null>(null);
+  const smokeMatRef = useRef<THREE.MeshToonMaterial | null>(null);
+  const carMatRef = useRef<THREE.MeshToonMaterial | null>(null);
 
   const mouse = useRef(new THREE.Vector2());
   const { camera } = useThree();
   const { isDark } = useTheme();
   const isPlaying = usePlayMode(s => s.isPlaying);
+  const projects = useProjectStore(s => s.projects);
 
   const uSpeed = 0.0004;
-  let createCarPos = true;
 
   const isDragging = useRef(false);
   const lastDrag = useRef(new THREE.Vector2());
@@ -64,6 +68,7 @@ const City = () => {
 
   /* ------------------ Init City ------------------ */
   useEffect(() => {
+    let createCarPos = true;
     const town = townRef.current;
     const smoke = smokeRef.current;
     const city = cityRef.current;
@@ -104,7 +109,8 @@ const City = () => {
 
     /* Smoke particles */
     const pGeo = new THREE.CircleGeometry(0.01, 3);
-    const pMat = new THREE.MeshToonMaterial({ color: ACCENT.smokeParticles });
+    const pMat = new THREE.MeshToonMaterial({ color: DARK.smokeParticles });
+    smokeMatRef.current = pMat;
 
     for (let i = 0; i < 300; i++) {
       const p = new THREE.Mesh(pGeo, pMat);
@@ -133,17 +139,16 @@ const City = () => {
     city.add(ground);
 
     /* Grid */
-    const grid = new THREE.GridHelper(60, 120, ACCENT.gridCenter, DARK.gridLines);
+    const grid = new THREE.GridHelper(60, 120, DARK.gridCenter, DARK.gridLines);
     gridRef.current = grid;
     cityGroupRef.current = city;
     city.add(grid);
 
     /* Cars */
-    const createCars = (scale = 0.1, pos = 20, color = ACCENT.cars) => {
-      const mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(1, scale / 40, scale / 40),
-        new THREE.MeshToonMaterial({ color })
-      );
+    const carMat = new THREE.MeshToonMaterial({ color: DARK.cars });
+    carMatRef.current = carMat;
+    const createCars = (scale = 0.1, pos = 20) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, scale / 40, scale / 40), carMat);
 
       if (createCarPos) {
         createCarPos = false;
@@ -187,7 +192,6 @@ const City = () => {
     const buildingColor = palette.building;
     const wireColor = palette.wire;
     const groundColor = palette.ground;
-    const gridLineColor = palette.gridLines;
 
     town.children.forEach(child => {
       const cube = child as THREE.Mesh;
@@ -213,9 +217,17 @@ const City = () => {
     if (gridRef.current && cityGroupRef.current) {
       cityGroupRef.current.remove(gridRef.current);
       gridRef.current.geometry.dispose();
-      const newGrid = new THREE.GridHelper(60, 120, ACCENT.gridCenter, gridLineColor);
+      const newGrid = new THREE.GridHelper(60, 120, palette.gridCenter, palette.gridLines);
       gridRef.current = newGrid;
       cityGroupRef.current.add(newGrid);
+    }
+
+    if (smokeMatRef.current) {
+      smokeMatRef.current.color.setHex(palette.smokeParticles);
+    }
+
+    if (carMatRef.current) {
+      carMatRef.current.color.setHex(palette.cars);
     }
   }, [isDark]);
 
@@ -250,6 +262,7 @@ const City = () => {
       isDragging.current = true;
       lastDrag.current.set(e.clientX, e.clientY);
       const city = cityRef.current;
+      if (!city) return;
       dragRotation.current.set(city.rotation.x, city.rotation.y, city.rotation.z);
     };
 
@@ -292,6 +305,15 @@ const City = () => {
     <group ref={cityRef}>
       <group ref={townRef} />
       <group ref={smokeRef} />
+      <group visible={isPlaying}>
+        {projects.map((project, i) => (
+          <ProjectTile
+            key={project.id}
+            project={project}
+            angle={(i / projects.length) * Math.PI * 2}
+          />
+        ))}
+      </group>
     </group>
   );
 };

@@ -43,7 +43,6 @@ const styles: CSSInterface = {
   },
   imageCard: {
     overflow: 'hidden',
-    borderRadius: '1rem',
     position: 'relative',
     zIndex: 2,
     boxShadow: '0 -8px 24px 4px rgba(0, 0, 0, 0.5)',
@@ -69,7 +68,6 @@ const styles: CSSInterface = {
     objectFit: 'cover',
     pointerEvents: 'none',
     userSelect: 'none',
-    borderRadius: '1rem',
     width: '100%',
     height: '100%',
   },
@@ -78,7 +76,7 @@ const styles: CSSInterface = {
     pointerEvents: 'none',
     userSelect: 'none',
     transform: 'scale(1.1)',
-    borderRadius: '1rem',
+    borderRadius: '0',
     width: '100%',
     height: '100%',
   },
@@ -86,7 +84,6 @@ const styles: CSSInterface = {
     position: 'relative',
     width: '100%',
     height: '100%',
-    borderRadius: '1rem',
     overflow: 'hidden',
   },
   vignetteOverlay: {
@@ -121,7 +118,6 @@ const styles: CSSInterface = {
     top: '40%',
     height: '75px',
     width: '25px',
-    borderRadius: '0',
   },
   navigationButtonNext: {
     display: 'flex',
@@ -133,7 +129,6 @@ const styles: CSSInterface = {
     top: '40%',
     height: '75px',
     width: '25px',
-    borderRadius: '0',
   },
   buttonContainer: {
     display: 'flex',

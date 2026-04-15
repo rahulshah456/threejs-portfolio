@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 
 const THEME_KEY = 'theme-preference';
 
@@ -19,6 +19,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setIsDark(prev => {
       const next = !prev;
       localStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
+      window.dispatchEvent(new CustomEvent('theme-change', { detail: next }));
       return next;
     });
   };
