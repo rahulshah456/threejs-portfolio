@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from 'antd';
 import { useWindowSize } from '@uidotdev/usehooks';
 import type { ProjectPageRecord } from '../../utils/interfaces';
@@ -70,6 +70,7 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
 
   const isMobile = (width ?? 0) < 768;
   const isTablet = (width ?? 0) >= 768 && (width ?? 0) <= 1280;
+  const [isContentHovered, setIsContentHovered] = useState(false);
 
   const handleButtonClick = (
     buttonType: 'navigation' | 'link',
@@ -92,12 +93,25 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
     }
 
     return (
-      <div style={styles.buttonContainer}>
+      <div
+        style={{
+          ...styles.buttonContainer,
+          marginTop: 0,
+          opacity: isContentHovered ? 1 : 0,
+          transition: 'opacity 0.3s',
+        }}
+      >
         {pageData.buttons.map((button, index) => (
           <Button
             key={index}
             type={button.isPrimary ? 'primary' : 'default'}
             size={isMobile ? 'middle' : 'large'}
+            style={{
+              borderRadius: '0',
+              fontFamily: 'Sulphur Point',
+              clipPath:
+                'polygon(0 0, calc(100% - 0.75rem) 0, 100% 0.75rem, 100% 100%, 0.75rem 100%, 0 calc(100% - 0.75rem))',
+            }}
             onClick={() => handleButtonClick(button.buttonType, button.url, button.navigationPath)}
             disabled={button.disabled}
           >
@@ -111,15 +125,22 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
 
   const renderContentInfo = () => {
     return (
-      <div style={styles.contentInfo}>
-        <span
-          style={{
-            ...styles.pageNumberText,
-            fontSize: isTablet ? 'clamp(2.4rem, 7.2vw, 6.4rem)' : 'clamp(2.4rem, 8vw, 6.4rem)',
-          }}
-        >
-          {String(pageData.page_number).padStart(2, '0')}
-        </span>
+      <div
+        style={styles.contentInfo}
+        onMouseEnter={() => setIsContentHovered(true)}
+        onMouseLeave={() => setIsContentHovered(false)}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span
+            style={{
+              ...styles.pageNumberText,
+              fontSize: isTablet ? 'clamp(2.4rem, 7.2vw, 6.4rem)' : 'clamp(2.4rem, 8vw, 6.4rem)',
+            }}
+          >
+            {String(pageData.page_number).padStart(2, '0')}
+          </span>
+          {renderButtons()}
+        </div>
         <span
           style={{
             ...styles.headerText,
@@ -138,7 +159,6 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
         >
           {pageData.message}
         </span>
-        {renderButtons()}
       </div>
     );
   };

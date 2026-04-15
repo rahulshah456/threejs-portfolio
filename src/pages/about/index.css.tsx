@@ -4,12 +4,10 @@ const styles: CSSInterface = {
   page: {
     width: '100vw',
     height: '100vh',
-    backgroundColor: 'black',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative' as const,
-    overflow: 'hidden',
     pointerEvents: 'auto',
     isolation: 'isolate',
   },
@@ -22,11 +20,13 @@ const styles: CSSInterface = {
     zIndex: 2,
   },
   heading: {
+    display: 'inline-block',
     fontSize: 'clamp(1rem, 2vw, 1.5rem)',
     fontWeight: '900',
     color: '#fff',
   },
   statement: {
+    display: 'inline-block',
     fontSize: 'clamp(2rem, 5vw, 5rem)',
     fontWeight: '300',
     color: 'rgba(255, 255, 255, 0.72)',
@@ -46,6 +46,7 @@ const styles: CSSInterface = {
     left: 0,
     width: '100%',
     height: '100%',
+    overflow: 'hidden',
     pointerEvents: 'none' as const,
   },
   image: {

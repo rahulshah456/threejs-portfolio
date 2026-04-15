@@ -1,14 +1,16 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider, Button, theme as antTheme } from 'antd';
+import { Canvas } from '@react-three/fiber';
+import { ScrollControls, Scroll } from '@react-three/drei';
 import About from './pages/about/About';
 import Home from './pages/home/Home';
 import ProjectPage from './pages/project/ProjectPage';
-import LazySection from './components/LazySection';
 import { useProjectsData } from './hooks/useProjectsData';
 import { useProjectStore } from './store/projectStore';
+import LandingPage from './pages/landing/LandingPage';
+import { ThemeProvider, useTheme } from './components/custom-hooks/useTheme';
 
-const THEME_KEY = 'theme-preference';
 const queryClient = new QueryClient();
 
 const ThemedBody = ({ children }: { children: ReactNode }) => {
@@ -25,35 +27,28 @@ const ProjectDataLoader = () => {
   return null;
 };
 
-const AppContent = () => {
+const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
+  const pages = 2 + projects.length;
 
   return (
-    <div style={{ width: '100vw', height: 'auto', overflowX: 'hidden' }}>
+    <>
       <Home />
-      <About />
-      {projects.map(project => (
-        <LazySection key={project.id}>
-          <ProjectPage projectData={project} />
-        </LazySection>
-      ))}
-    </div>
+      <ScrollControls pages={pages} damping={0.1}>
+        <Scroll html>
+          <LandingPage />
+          <About />
+          {projects.map(project => (
+            <ProjectPage key={project.id} projectData={project} />
+          ))}
+        </Scroll>
+      </ScrollControls>
+    </>
   );
 };
 
 const App = () => {
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    const saved = localStorage.getItem(THEME_KEY);
-    return saved !== null ? saved === 'dark' : true;
-  });
-
-  const toggleTheme = () => {
-    setIsDark(prev => {
-      const next = !prev;
-      localStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
-      return next;
-    });
-  };
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <ConfigProvider
@@ -62,10 +57,23 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemedBody>
           <ProjectDataLoader />
-          <AppContent />
+          <div className="page-reveal-overlay" style={{ background: isDark ? '#000' : '#fff' }} />
+          <Canvas
+            style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}
+            shadows
+            camera={{ position: [0, 2, 14], fov: 20, near: 1, far: 500 }}
+          >
+            <SceneContent />
+          </Canvas>
           <Button
             onClick={toggleTheme}
-            style={{ position: 'fixed', bottom: '1rem', right: '1rem', padding: '1rem' }}
+            style={{
+              position: 'fixed',
+              bottom: '1rem',
+              right: '1rem',
+              padding: '1rem',
+              zIndex: 1000,
+            }}
           >
             {isDark ? '☀️' : '🌙'}
           </Button>
@@ -75,4 +83,10 @@ const App = () => {
   );
 };
 
-export default App;
+const AppWithProviders = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+export default AppWithProviders;

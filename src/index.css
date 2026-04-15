@@ -2,6 +2,26 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@keyframes page-reveal {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.page-reveal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  animation: page-reveal 2s ease-out 0.3s forwards;
+}
+
 @font-face {
   font-family: 'Valorax';
   src: url('/fonts/valorax.woff') format('woff');

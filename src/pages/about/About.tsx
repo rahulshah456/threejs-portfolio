@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import Aurora from '../../components/Aurora';
 
 const baseUrl = `${import.meta.env.VITE_SUPABASE_URL}${import.meta.env.VITE_SUPABASE_STORAGE_BUCKET}/about`;
 import styles from './index.css.tsx';
@@ -63,24 +62,6 @@ const About = () => {
 
   return (
     <div style={styles.page}>
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          height: '50%',
-          zIndex: 0,
-          transform: 'rotate(180deg)',
-        }}
-      >
-        <Aurora
-          colorStops={['#ffc50f', '#ff8c00', '#ff0000']}
-          amplitude={1.2}
-          blend={0.6}
-          speed={0.8}
-        />
-      </div>
       <div style={styles.imagesContainer}>
         <img
           ref={el => {

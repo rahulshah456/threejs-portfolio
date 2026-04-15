@@ -196,12 +196,17 @@ src/
 │   ├── constants.ts       # Global constants
 │   └── ...
 ├── pages/
+│   ├── landing/
+│   │   ├── LandingPage.tsx         # Hero text with GSAP animations
+│   │   └── index.css.tsx           # Landing page styles
 │   └── project/
 │       ├── ProjectPage.tsx          # Dynamic component
 │       └── core/
 │           ├── one.ts              # Project 1 data
 │           └── two.ts              # Project 2 data
-└── components/            # Reusable UI components
+└── components/
+    └── custom-hooks/               # Reusable hooks
+        └── useTheme.tsx            # Theme context + hook
 ```
 
 ## 🎯 Current Interfaces
@@ -219,9 +224,33 @@ interface ProjectData {
 }
 ```
 
+## 🪝 Custom Hooks & Context
+
+### useTheme
+
+Located in `src/components/custom-hooks/useTheme.tsx`
+
+Provides dark/light mode state via React Context. Wrap app root with `ThemeProvider`, consume anywhere with `useTheme()`.
+
+```typescript
+// ✅ Root setup — wrap once at the top
+const AppWithProviders = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+// ✅ Consume anywhere in the tree
+const { isDark, toggleTheme } = useTheme();
+```
+
+- Do **not** duplicate theme state locally — always use `useTheme()`
+- `ThemeProvider` owns `localStorage` read/write
+- New global hooks follow same pattern: context + provider + `useX()` hook, all in one file in `custom-hooks/`
+
 ---
 
-**Last Updated**: March 4, 2026
+**Last Updated**: April 15, 2026
 **Maintainers**: Development Team
 
 _Remember: These guidelines ensure consistency, maintainability, and scalability across the project._
