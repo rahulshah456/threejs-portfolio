@@ -9,6 +9,8 @@ import ProjectPage from './pages/project/ProjectPage';
 import { useProjectsData } from './hooks/useProjectsData';
 import { useProjectStore } from './store/projectStore';
 import LandingPage from './pages/landing/LandingPage';
+import PlayButton from './components/city/PlayButton';
+import { usePlayMode } from './store/playModeStore';
 import { ThemeProvider, useTheme } from './components/custom-hooks/useTheme';
 
 const queryClient = new QueryClient();
@@ -31,26 +33,44 @@ const ProjectDataLoader = () => {
 
 const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
+  const isPlaying = usePlayMode(s => s.isPlaying);
   const pages = 2 + projects.length;
 
   return (
     <>
       <Home />
-      <ScrollControls pages={pages} damping={0.1}>
-        <Scroll html>
-          <LandingPage />
-          <About />
-          {projects.map(project => (
-            <ProjectPage key={project.id} projectData={project} />
-          ))}
-        </Scroll>
-      </ScrollControls>
+      {!isPlaying && (
+        <ScrollControls pages={pages} damping={0.1}>
+          <Scroll html>
+            <LandingPage />
+            <About />
+            {projects.map(project => (
+              <ProjectPage key={project.id} projectData={project} />
+            ))}
+          </Scroll>
+        </ScrollControls>
+      )}
     </>
   );
 };
 
 const App = () => {
   const { isDark, toggleTheme } = useTheme();
+  const isPlaying = usePlayMode(s => s.isPlaying);
+
+  useEffect(() => {
+    if (isPlaying) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isPlaying]);
 
   return (
     <ConfigProvider
@@ -79,6 +99,7 @@ const App = () => {
           >
             {isDark ? '☀️' : '🌙'}
           </Button>
+          <PlayButton />
         </ThemedBody>
       </QueryClientProvider>
     </ConfigProvider>

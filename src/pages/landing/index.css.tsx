@@ -20,6 +20,7 @@ const styles: CSSInterface = {
   title: {
     fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)',
     fontWeight: '300',
+    userSelect: 'none',
     opacity: 0,
   },
 };

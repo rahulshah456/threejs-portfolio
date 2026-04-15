@@ -3,6 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useTheme } from '../custom-hooks/useTheme';
+import { usePlayMode } from '../../store/playModeStore';
+import { buildings } from './cityData';
 
 /* ------------------ Utils ------------------ */
 
@@ -51,6 +53,7 @@ const City = () => {
   const mouse = useRef(new THREE.Vector2());
   const { camera } = useThree();
   const { isDark } = useTheme();
+  const isPlaying = usePlayMode(s => s.isPlaying);
 
   const uSpeed = 0.0004;
   let createCarPos = true;
@@ -66,7 +69,7 @@ const City = () => {
     const city = cityRef.current;
 
     /* Buildings */
-    for (let i = 1; i < 100; i++) {
+    buildings.forEach(b => {
       const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
 
       const material = new THREE.MeshStandardMaterial({
@@ -88,16 +91,16 @@ const City = () => {
 
       cube.add(wire);
 
-      cube.scale.y = 0.1 + Math.abs(mathRandom(8));
-      cube.scale.x = cube.scale.z = 0.9 + mathRandom(0.1);
+      cube.scale.y = b.scaleY;
+      cube.scale.x = cube.scale.z = b.scaleXZ;
 
-      cube.position.x = Math.round(mathRandom());
-      cube.position.z = Math.round(mathRandom());
+      cube.position.x = b.posX;
+      cube.position.z = b.posZ;
       cube.castShadow = true;
       cube.receiveShadow = true;
 
       town.add(cube);
-    }
+    });
 
     /* Smoke particles */
     const pGeo = new THREE.CircleGeometry(0.01, 3);
@@ -216,6 +219,17 @@ const City = () => {
     }
   }, [isDark]);
 
+  /* ------------------ Play Mode ------------------ */
+  useEffect(() => {
+    const city = cityRef.current;
+    if (isPlaying) {
+      gsap.to(city.rotation, { x: 0, y: 0, z: 0, duration: 0.5 });
+    } else {
+      camera.position.set(0, 2, 14);
+      camera.lookAt(city.position);
+    }
+  }, [isPlaying, camera]);
+
   /* ------------------ Mouse ------------------ */
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -258,19 +272,20 @@ const City = () => {
     const city = cityRef.current;
     const smoke = smokeRef.current;
 
-    if (isDragging.current) {
-      city.rotation.x = dragRotation.current.x;
-      city.rotation.y = dragRotation.current.y;
-    } else {
-      city.rotation.y -= (mouse.current.x * 8 - camera.rotation.y) * uSpeed;
-      city.rotation.x -= (-(mouse.current.y * 2) - camera.rotation.x) * uSpeed;
-      city.rotation.x = THREE.MathUtils.clamp(city.rotation.x, -0.05, 1);
+    if (!isPlaying) {
+      if (isDragging.current) {
+        city.rotation.x = dragRotation.current.x;
+        city.rotation.y = dragRotation.current.y;
+      } else {
+        city.rotation.y -= (mouse.current.x * 8 - camera.rotation.y) * uSpeed;
+        city.rotation.x -= (-(mouse.current.y * 2) - camera.rotation.x) * uSpeed;
+        city.rotation.x = THREE.MathUtils.clamp(city.rotation.x, -0.05, 1);
+      }
+      camera.lookAt(city.position);
     }
 
     smoke.rotation.x += 0.01;
     smoke.rotation.y += 0.01;
-
-    camera.lookAt(city.position);
   });
 
   return (
