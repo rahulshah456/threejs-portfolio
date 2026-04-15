@@ -15,10 +15,12 @@ const queryClient = new QueryClient();
 
 const ThemedBody = ({ children }: { children: ReactNode }) => {
   const { token } = antTheme.useToken();
+  const { isDark } = useTheme();
   useEffect(() => {
     document.body.style.backgroundColor = token.colorBgBase;
     document.body.style.color = token.colorText;
-  }, [token.colorBgBase, token.colorText]);
+    document.documentElement.style.setProperty('--scrollbar-color', isDark ? '#ffc50f' : '#ff0000');
+  }, [token.colorBgBase, token.colorText, isDark]);
   return <>{children}</>;
 };
 

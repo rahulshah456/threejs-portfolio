@@ -11,7 +11,6 @@ const styles: CSSInterface = {
     pointerEvents: 'none',
   },
   name: {
-    color: 'white',
     fontSize: 'clamp(3rem, 6vw, 8rem)',
     fontWeight: '900',
     fontFamily: 'Valorax',
@@ -19,7 +18,6 @@ const styles: CSSInterface = {
     opacity: 0,
   },
   title: {
-    color: 'white',
     fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)',
     fontWeight: '300',
     opacity: 0,

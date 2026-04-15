@@ -2,26 +2,57 @@ import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useTheme } from '../custom-hooks/useTheme';
 
 /* ------------------ Utils ------------------ */
 
 const mathRandom = (num = 8) => -Math.random() * num + Math.random() * num;
 
-let tintToggle = true;
-const setTintColor = () => {
-  tintToggle = !tintToggle;
-  return 0x000000;
-};
+/* ------------------ Theme Palette ------------------ */
+
+const DARK = {
+  building: 0x000000,
+  buildingRoughness: 1,
+  buildingMetalness: 0,
+  wire: 0xffffff,
+  wireOpacity: 0.03,
+  ground: 0x000000,
+  groundShininess: 10,
+  groundSpecular: 0x111111,
+  gridLines: 0x000000,
+} as const;
+
+const LIGHT = {
+  building: 0xf9f8f6,
+  buildingRoughness: 0.45,
+  buildingMetalness: 0.2,
+  wire: 0xb17f59,
+  wireOpacity: 0.22,
+  ground: 0xd9c4b0,
+  groundShininess: 120,
+  groundSpecular: 0xc8bfb0,
+  gridLines: 0xcfab8d,
+} as const;
+
+const ACCENT = {
+  gridCenter: 0xff0000,
+  smokeParticles: 0xffff00,
+  cars: 0xffff00,
+} as const;
 
 const City = () => {
   const cityRef = useRef<THREE.Group>(null!);
   const townRef = useRef<THREE.Group>(null!);
   const smokeRef = useRef<THREE.Group>(null!);
+  const groundRef = useRef<THREE.Mesh | null>(null);
+  const gridRef = useRef<THREE.GridHelper | null>(null);
+  const cityGroupRef = useRef<THREE.Group | null>(null);
 
   const mouse = useRef(new THREE.Vector2());
   const { camera } = useThree();
+  const { isDark } = useTheme();
 
-  const uSpeed = 0.001;
+  const uSpeed = 0.0004;
   let createCarPos = true;
 
   const isDragging = useRef(false);
@@ -39,15 +70,17 @@ const City = () => {
       const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
 
       const material = new THREE.MeshStandardMaterial({
-        color: setTintColor(),
+        color: DARK.building,
         side: THREE.DoubleSide,
+        roughness: DARK.buildingRoughness,
+        metalness: DARK.buildingMetalness,
       });
 
       const wireMat = new THREE.MeshLambertMaterial({
-        color: 0xffffff,
+        color: DARK.wire,
         wireframe: true,
         transparent: true,
-        opacity: 0.03,
+        opacity: DARK.wireOpacity,
       });
 
       const cube = new THREE.Mesh(geometry, material);
@@ -68,7 +101,7 @@ const City = () => {
 
     /* Smoke particles */
     const pGeo = new THREE.CircleGeometry(0.01, 3);
-    const pMat = new THREE.MeshToonMaterial({ color: 0xffff00 });
+    const pMat = new THREE.MeshToonMaterial({ color: ACCENT.smokeParticles });
 
     for (let i = 0; i < 300; i++) {
       const p = new THREE.Mesh(pGeo, pMat);
@@ -83,21 +116,27 @@ const City = () => {
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(60, 60),
       new THREE.MeshPhongMaterial({
-        color: 0x000000,
+        color: DARK.ground,
         opacity: 0.9,
         transparent: true,
+        shininess: DARK.groundShininess,
+        specular: new THREE.Color(DARK.groundSpecular),
       })
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.001;
     ground.receiveShadow = true;
+    groundRef.current = ground;
     city.add(ground);
 
     /* Grid */
-    city.add(new THREE.GridHelper(60, 120, 0xff0000, 0x000000));
+    const grid = new THREE.GridHelper(60, 120, ACCENT.gridCenter, DARK.gridLines);
+    gridRef.current = grid;
+    cityGroupRef.current = city;
+    city.add(grid);
 
     /* Cars */
-    const createCars = (scale = 0.1, pos = 20, color = 0xffff00) => {
+    const createCars = (scale = 0.1, pos = 20, color = ACCENT.cars) => {
       const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(1, scale / 40, scale / 40),
         new THREE.MeshToonMaterial({ color })
@@ -135,6 +174,48 @@ const City = () => {
     for (let i = 0; i < 60; i++) createCars();
   }, []);
 
+  /* ------------------ Theme ------------------ */
+  useEffect(() => {
+    const town = townRef.current;
+    if (!town) return;
+
+    const palette = isDark ? DARK : LIGHT;
+
+    const buildingColor = palette.building;
+    const wireColor = palette.wire;
+    const groundColor = palette.ground;
+    const gridLineColor = palette.gridLines;
+
+    town.children.forEach(child => {
+      const cube = child as THREE.Mesh;
+      const mat = cube.material as THREE.MeshStandardMaterial;
+      mat.color.setHex(buildingColor);
+      mat.roughness = palette.buildingRoughness;
+      mat.metalness = palette.buildingMetalness;
+      const wire = cube.children[0] as THREE.Mesh;
+      if (wire) {
+        const wMat = wire.material as THREE.MeshLambertMaterial;
+        wMat.color.setHex(wireColor);
+        wMat.opacity = palette.wireOpacity;
+      }
+    });
+
+    if (groundRef.current) {
+      const mat = groundRef.current.material as THREE.MeshPhongMaterial;
+      mat.color.setHex(groundColor);
+      mat.shininess = palette.groundShininess;
+      mat.specular.setHex(palette.groundSpecular);
+    }
+
+    if (gridRef.current && cityGroupRef.current) {
+      cityGroupRef.current.remove(gridRef.current);
+      gridRef.current.geometry.dispose();
+      const newGrid = new THREE.GridHelper(60, 120, ACCENT.gridCenter, gridLineColor);
+      gridRef.current = newGrid;
+      cityGroupRef.current.add(newGrid);
+    }
+  }, [isDark]);
+
   /* ------------------ Mouse ------------------ */
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -144,8 +225,8 @@ const City = () => {
       if (isDragging.current) {
         const dx = e.clientX - lastDrag.current.x;
         const dy = e.clientY - lastDrag.current.y;
-        dragRotation.current.y += dx * 0.005;
-        dragRotation.current.x += dy * 0.005;
+        dragRotation.current.y += dx * 0.002;
+        dragRotation.current.x += dy * 0.002;
         dragRotation.current.x = THREE.MathUtils.clamp(dragRotation.current.x, -0.05, 1);
         lastDrag.current.set(e.clientX, e.clientY);
       }
