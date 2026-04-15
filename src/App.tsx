@@ -3,12 +3,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider, Button, theme as antTheme } from 'antd';
 import { Canvas } from '@react-three/fiber';
 import { ScrollControls, Scroll } from '@react-three/drei';
+import ScrollWatcher from './components/ScrollWatcher';
 import About from './pages/about/About';
 import Home from './pages/home/Home';
 import ProjectPage from './pages/project/ProjectPage';
 import { useProjectsData } from './hooks/useProjectsData';
 import { useProjectStore } from './store/projectStore';
 import LandingPage from './pages/landing/LandingPage';
+import SectionHeader from './pages/section-header/SectionHeader';
 import PlayButton from './components/city/PlayButton';
 import { usePlayMode } from './store/playModeStore';
 import { ThemeProvider, useTheme } from './components/custom-hooks/useTheme';
@@ -34,16 +36,18 @@ const ProjectDataLoader = () => {
 const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
   const isPlaying = usePlayMode(s => s.isPlaying);
-  const pages = 2 + projects.length;
+  const pages = 3 + projects.length;
 
   return (
     <>
       <Home />
       {!isPlaying && (
         <ScrollControls pages={pages} damping={0.1}>
+          <ScrollWatcher pages={pages} />
           <Scroll html>
             <LandingPage />
             <About />
+            <SectionHeader title="Projects" />
             {projects.map(project => (
               <ProjectPage key={project.id} projectData={project} />
             ))}
