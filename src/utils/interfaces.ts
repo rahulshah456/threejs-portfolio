@@ -1,3 +1,7 @@
+// Top-level type for all projects data (matches JSON structure)
+export type ProjectsData = {
+  projects: ProjectWithPages[];
+};
 import type { CSSProperties } from 'react';
 
 export interface CSSInterface {
