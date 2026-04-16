@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useMediaCache } from '../../hooks/useMediaCache';
 import type { ProjectPageRecord } from '../../utils/interfaces';
 import styles from './index.css.tsx';
 
@@ -17,6 +18,10 @@ const ImageCard = ({ pageData, isCarouselActive = true }: Props) => {
 
   const isVideoContent = pageData.media_type === 'video' || isVideo(pageData.media_path ?? '');
   const mediaPath = pageData.media_path ?? '';
+
+  // Resolve through IndexedDB blob cache (avoids repeated Supabase CDN hits)
+  const { cachedUrl } = useMediaCache(mediaPath || null, pageData.updated_at);
+  const resolvedUrl = cachedUrl ?? mediaPath;
 
   useEffect(() => {
     const v = videoRef.current;
@@ -42,19 +47,12 @@ const ImageCard = ({ pageData, isCarouselActive = true }: Props) => {
   const getContent = () => {
     if (isVideoContent) {
       return (
-        <video ref={videoRef} src={mediaPath} loop muted playsInline style={styles.video}>
+        <video ref={videoRef} src={resolvedUrl} loop muted playsInline style={styles.video}>
           Your browser does not support the video tag.
         </video>
       );
     } else {
-      return (
-        <img
-          src={pageData.media_path ?? ''}
-          alt={pageData.header}
-          loading="lazy"
-          style={styles.image}
-        />
-      );
+      return <img src={resolvedUrl} alt={pageData.header} loading="lazy" style={styles.image} />;
     }
   };
 

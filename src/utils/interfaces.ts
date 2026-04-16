@@ -26,6 +26,8 @@ export interface Project {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  position: number;
+  goal: string | null;
 }
 
 // Mirrors DB `project_pages` table

@@ -31,6 +31,11 @@ const ProjectPage = ({ projectData }: Props) => {
       header = page?.header;
     }
 
+    let message = page?.message;
+    if (index === 0) {
+      message = projectData.goal;
+    }
+
     return (
       <div
         style={{
@@ -44,7 +49,15 @@ const ProjectPage = ({ projectData }: Props) => {
       >
         <span style={{ flex: '3.5', fontSize: '1.25rem', fontWeight: 'bold' }}>{header}</span>
         <span style={{ flex: '1' }} />
-        <span style={{ flex: '3', fontSize: '0.875rem' }}>{page.message}</span>
+        <span style={{ flex: '3', fontSize: '0.875rem' }}>
+          {message
+            ? message.split(/\n+/).map((para, i) => (
+                <p key={i} style={{ margin: 0, marginBottom: '0.5em' }}>
+                  {para}
+                </p>
+              ))
+            : null}
+        </span>
         {index === 0 && (
           <span
             style={{

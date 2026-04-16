@@ -48,9 +48,12 @@ const SceneContent = () => {
             <LandingPage />
             <About />
             <SectionHeader title="Projects" />
-            {projects.map(project => (
-              <ProjectPage key={project.id} projectData={project} />
-            ))}
+            {projects
+              .slice()
+              .sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0))
+              .map(project => (
+                <ProjectPage key={project.id} projectData={project} />
+              ))}
           </Scroll>
         </ScrollControls>
       )}

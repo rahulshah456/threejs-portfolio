@@ -1,7 +1,7 @@
 import type { CSSInterface } from '../../utils/interfaces';
 
 const slideSpacing = '0.5rem';
-const slideSize = '80%';
+const slideSize = 'clamp(54vw, 80vmin, 81vw)';
 
 const styles: CSSInterface = {
   container: {
@@ -12,7 +12,7 @@ const styles: CSSInterface = {
     alignItems: 'center',
     paddingTop: '5vh',
     position: 'relative',
-    borderTop: '2px solid red',
+    borderTop: '1px solid red',
   },
   backgroundLayer: {
     position: 'absolute',
@@ -37,12 +37,15 @@ const styles: CSSInterface = {
     flex: `0 0 ${slideSize}`,
     minWidth: 0,
     paddingLeft: slideSpacing,
+    marginRight: '8px', // horizontal gap between cards
   },
   imageCard: {
     overflow: 'hidden',
     position: 'relative',
     zIndex: 2,
     aspectRatio: '16/9',
+    width: slideSize,
+    maxWidth: '90vw',
   },
   inactiveOverlay: {
     position: 'absolute',
@@ -175,6 +178,7 @@ const styles: CSSInterface = {
     padding: 'clamp(1rem, 4vw, 4rem)',
     width: '100%',
     userSelect: 'none',
+    marginTop: '1.5rem',
   },
   pageNumberText: {
     color: 'white',
