@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 // Lenis disabled: using drei ScrollControls for scroll
+import setupLocatorUI from "@locator/runtime";
 // import Lenis from 'lenis';
 import './index.css';
 import App from './App.tsx';
@@ -10,8 +11,9 @@ import App from './App.tsx';
 // requestAnimationFrame(raf);
 
 // Initialize LocatorJS in development mode
-if (import.meta.env.DEV) {
-  import('@locator/runtime').then(module => module.default());
+if (process.env.NODE_ENV === "development") {
+  console.log("dev mode on!");
+  setupLocatorUI();
 }
 
 createRoot(document.getElementById('root')!).render(

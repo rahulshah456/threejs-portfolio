@@ -1,17 +1,18 @@
 import type { CSSInterface } from '../../utils/interfaces';
 
-const slideSpacing = '1rem';
-const slideSize = '70vw';
+const slideSpacing = '0.5rem';
+const slideSize = '80%';
 
 const styles: CSSInterface = {
   container: {
     width: '100vw',
-    height: '100vh',
-    // overflow: 'hidden',
+    height: '100vmin',
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: '5vh',
     position: 'relative',
+    borderTop: '2px solid red',
   },
   backgroundLayer: {
     position: 'absolute',
@@ -25,15 +26,11 @@ const styles: CSSInterface = {
   carouselWrapper: {
     maxWidth: '100%',
     position: 'relative',
-    // background: 'green',
     zIndex: 1,
-  },
-  carouselViewport: {
-    // overflow: 'hidden',
   },
   slidesTrack: {
     display: 'flex',
-    touchAction: 'pan-y pinch-zoom',
+    // touchAction: 'pan-y pinch-zoom',
     marginLeft: `calc(${slideSpacing} * -1)`,
   },
   slide: {
@@ -45,10 +42,15 @@ const styles: CSSInterface = {
     overflow: 'hidden',
     position: 'relative',
     zIndex: 2,
-    boxShadow: '0 -8px 24px 4px rgba(0, 0, 0, 0.5)',
+    aspectRatio: '16/9',
   },
-  cardWrapper: {
-    position: 'relative',
+  inactiveOverlay: {
+    position: 'absolute',
+    inset: 0,
+    background: 'rgba(0, 0, 0, 0.55)',
+    zIndex: 10,
+    pointerEvents: 'none',
+    transition: 'opacity 0.35s ease',
   },
   projectNameTab: {
     background: '#ff0000',
@@ -65,6 +67,7 @@ const styles: CSSInterface = {
     boxShadow: '0 6px 12px 4px rgba(0, 0, 0, 0.6)',
   },
   image: {
+    display: 'block',
     objectFit: 'cover',
     pointerEvents: 'none',
     userSelect: 'none',
@@ -72,19 +75,14 @@ const styles: CSSInterface = {
     height: '100%',
   },
   video: {
+    display: 'block',
     objectFit: 'cover',
     pointerEvents: 'none',
     userSelect: 'none',
-    transform: 'scale(1.1)',
+    transform: 'scale(1)',
     borderRadius: '0',
     width: '100%',
     height: '100%',
-  },
-  videoWrapper: {
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
   },
   vignetteOverlay: {
     position: 'absolute',
@@ -113,6 +111,7 @@ const styles: CSSInterface = {
     gap: '1rem',
     justifyContent: 'center',
     marginTop: '2rem',
+    borderRadius: '0',
     position: 'absolute',
     left: '0',
     top: '40%',
@@ -124,6 +123,7 @@ const styles: CSSInterface = {
     gap: '1rem',
     justifyContent: 'center',
     marginTop: '2rem',
+    borderRadius: '0',
     position: 'absolute',
     right: '1rem',
     top: '40%',
@@ -186,7 +186,7 @@ const styles: CSSInterface = {
   headerText: {
     color: 'white',
     fontWeight: '900',
-    fontFamily: 'Valorax',
+    fontFamily: 'Sulphur Point',
   },
   messageText: {
     fontWeight: '500',

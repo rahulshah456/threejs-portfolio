@@ -1,43 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { Button } from 'antd';
-import { useWindowSize } from '@uidotdev/usehooks';
+import { useEffect, useRef } from 'react';
 import type { ProjectPageRecord } from '../../utils/interfaces';
-import { getIconComponent } from '../../utils/iconMapper';
 import styles from './index.css.tsx';
 
 interface Props {
   pageData: ProjectPageRecord;
-  projectName: string;
-  /** When false, video is paused (e.g. slide not centered in Embla). */
   isCarouselActive?: boolean;
 }
 
-const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) => {
-  const { width, height } = useWindowSize();
+const ImageCard = ({ pageData, isCarouselActive = true }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  const viewportWidth = width ?? 0;
-  const viewportHeight = height ?? 0;
-
-  // Fixed width at 70vw
-  const cardWidth = viewportWidth * 0.7;
-  const maxHeight = viewportHeight * 0.8;
-
-  // Calculate aspect ratio based on viewport
-  let aspectRatio = viewportWidth / viewportHeight;
-
-  // Constrain aspect ratio with boundaries (9:16 portrait to 16:9 landscape)
-  const minRatio = 9 / 18; // Tallest (portrait)
-  const maxRatio = 16 / 9; // Widest (landscape)
-  aspectRatio = Math.max(minRatio, Math.min(maxRatio, aspectRatio));
-
-  // Calculate height based on width and aspect ratio
-  let cardHeight = cardWidth / aspectRatio;
-
-  // Constrain to max height
-  if (cardHeight > maxHeight) {
-    cardHeight = maxHeight;
-  }
 
   const isVideo = (url: string): boolean => {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
@@ -68,133 +39,38 @@ const ImageCard = ({ pageData, projectName, isCarouselActive = true }: Props) =>
     }
   }, [isCarouselActive, isVideoContent, mediaPath]);
 
-  const isMobile = (width ?? 0) < 768;
-  const isTablet = (width ?? 0) >= 768 && (width ?? 0) <= 1280;
-  const [isContentHovered, setIsContentHovered] = useState(false);
-
-  const handleButtonClick = (
-    buttonType: 'navigation' | 'link',
-    url?: string,
-    navigationPath?: string
-  ) => {
-    if (buttonType === 'link' && url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else if (buttonType === 'navigation' && navigationPath) {
-      const element = document.querySelector(navigationPath);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+  const getContent = () => {
+    if (isVideoContent) {
+      return (
+        <video ref={videoRef} src={mediaPath} loop muted playsInline style={styles.video}>
+          Your browser does not support the video tag.
+        </video>
+      );
+    } else {
+      return (
+        <img
+          src={pageData.media_path ?? ''}
+          alt={pageData.header}
+          loading="lazy"
+          style={styles.image}
+        />
+      );
     }
-  };
-
-  const renderButtons = () => {
-    if (!pageData.show_buttons || pageData.buttons.length === 0) {
-      return null;
-    }
-
-    return (
-      <div
-        style={{
-          ...styles.buttonContainer,
-          marginTop: 0,
-          opacity: isContentHovered ? 1 : 0,
-          transition: 'opacity 0.3s',
-        }}
-      >
-        {pageData.buttons.map((button, index) => (
-          <Button
-            key={index}
-            type={button.isPrimary ? 'primary' : 'default'}
-            size={isMobile ? 'middle' : 'large'}
-            style={{
-              borderRadius: '0',
-              fontFamily: 'Sulphur Point',
-              clipPath:
-                'polygon(0 0, calc(100% - 0.75rem) 0, 100% 0.75rem, 100% 100%, 0.75rem 100%, 0 calc(100% - 0.75rem))',
-            }}
-            onClick={() => handleButtonClick(button.buttonType, button.url, button.navigationPath)}
-            disabled={button.disabled}
-          >
-            <span style={styles.buttonIcon}>{getIconComponent(button.icon)}</span>
-            <span>{button.text}</span>
-          </Button>
-        ))}
-      </div>
-    );
-  };
-
-  const renderContentInfo = () => {
-    return (
-      <div
-        style={styles.contentInfo}
-        onMouseEnter={() => setIsContentHovered(true)}
-        onMouseLeave={() => setIsContentHovered(false)}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span
-            style={{
-              ...styles.pageNumberText,
-              fontSize: isTablet ? 'clamp(2.4rem, 7.2vw, 6.4rem)' : 'clamp(2.4rem, 8vw, 6.4rem)',
-            }}
-          >
-            {String(pageData.page_number).padStart(2, '0')}
-          </span>
-          {renderButtons()}
-        </div>
-        <span
-          style={{
-            ...styles.headerText,
-            fontSize: isTablet ? 'clamp(1rem, 2.4vw, 2.4rem)' : 'clamp(1rem, 3.2vw, 2.4rem)',
-          }}
-        >
-          {pageData.header}
-        </span>
-        <span
-          style={{
-            ...styles.messageText,
-            fontSize: isTablet
-              ? 'clamp(0.525rem, 1.2vw, 1.2rem)'
-              : 'clamp(0.525rem, 1.5vw, 1.2rem)',
-          }}
-        >
-          {pageData.message}
-        </span>
-      </div>
-    );
   };
 
   return (
-    <div style={styles.cardWrapper}>
-      {pageData.page_number === 1 && <div style={styles.projectNameTab}>{projectName}</div>}
+    <div>
       <div style={styles.imageCard}>
-        {isVideoContent ? (
-          <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
-            <video
-              ref={videoRef}
-              src={mediaPath}
-              controls
-              loop
-              muted
-              playsInline
-              style={styles.video}
-            >
-              Your browser does not support the video tag.
-            </video>
-            {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
-            <div style={styles.contentOverlay}>{renderContentInfo()}</div>
-          </div>
-        ) : (
-          <div style={{ ...styles.videoWrapper, width: cardWidth, height: cardHeight }}>
-            <img
-              src={pageData.media_path ?? ''}
-              alt={pageData.header}
-              loading="lazy"
-              style={styles.image}
-            />
-            {pageData.show_vignette && <div style={styles.vignetteOverlay} />}
-            <div style={styles.contentOverlay}>{renderContentInfo()}</div>
-          </div>
-        )}
+        <div
+          style={{
+            ...styles.inactiveOverlay,
+            opacity: isCarouselActive ? 0 : 1,
+            pointerEvents: isCarouselActive ? 'none' : 'auto',
+          }}
+        />
+        {getContent()}
+        {/* {pageData.show_vignette && <div style={styles.vignetteOverlay} />} */}
+        {/* <div style={styles.contentOverlay}>{renderContentInfo()}</div> */}
       </div>
     </div>
   );
