@@ -36,7 +36,7 @@ const ProjectDataLoader = () => {
 const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
   const isPlaying = usePlayMode(s => s.isPlaying);
-  const pages = 3 + projects.length;
+  const pages = 5 + projects.length;
 
   return (
     <>
@@ -54,6 +54,8 @@ const SceneContent = () => {
               .map(project => (
                 <ProjectPage key={project.id} projectData={project} />
               ))}
+            <SectionHeader title="Expertise" />
+            <SectionHeader title="Contact Me" />
           </Scroll>
         </ScrollControls>
       )}

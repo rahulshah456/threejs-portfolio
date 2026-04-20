@@ -16,11 +16,10 @@ const ProjectPage = ({ projectData }: Props) => {
     align: 'center',
   });
   const { pages } = projectData;
+
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } =
     useEmblaNavigation(emblaApi);
   const selectedSnap = useEmblaSelectedSnap(emblaApi);
-
-  console.log('ProjectPage render', projectData);
 
   const getPageContentInfo = (index: number) => {
     const page = pages?.[index];
@@ -50,6 +49,7 @@ const ProjectPage = ({ projectData }: Props) => {
         <span style={{ flex: '3.5', fontSize: '1.25rem', fontWeight: 'bold' }}>{header}</span>
         <span style={{ flex: '1' }} />
         <span style={{ flex: '3', fontSize: '0.875rem' }}>
+          {index === 0 && <span style={{ fontWeight: '700' }}>GOAL</span>}
           {message
             ? message.split(/\n+/).map((para, i) => (
                 <p key={i} style={{ margin: 0, marginBottom: '0.5em' }}>
@@ -68,6 +68,7 @@ const ProjectPage = ({ projectData }: Props) => {
               gap: '0.25rem',
             }}
           >
+            <span style={{ fontWeight: '700' }}>TECHSTACK</span>
             {projectData.tags.join(', ')}
           </span>
         )}
@@ -76,7 +77,7 @@ const ProjectPage = ({ projectData }: Props) => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, borderTop: `1px solid red` }}>
       <div style={styles.carouselWrapper}>
         <div ref={emblaRef}>
           <div style={styles.slidesTrack}>
