@@ -6,10 +6,40 @@ const slideSize = 'clamp(54vw, 80vmin, 81vw)';
 const styles: CSSInterface = {
   container: {
     width: '100vw',
-    height: '100vmin',
     display: 'flex',
     paddingTop: '10vh',
     position: 'relative',
+  },
+  pageContentInfo: {
+    height: 'auto',
+    width: '100%',
+    marginTop: '1rem',
+    userSelect: 'none',
+    display: 'flex',
+    gap: '1rem',
+    flexDirection: 'column',
+  },
+  pageContentInfoTablet: {
+    flexDirection: 'row',
+  },
+  pageHeader: {
+    flex: '3.5',
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+  },
+  pageSpacer: {
+    flex: '1',
+  },
+  pageMessage: {
+    flex: '3',
+    fontSize: '0.875rem',
+  },
+  pageTechstack: {
+    flex: '1',
+    fontSize: '0.875rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
   },
   backgroundLayer: {
     position: 'absolute',

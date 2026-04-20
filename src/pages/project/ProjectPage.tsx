@@ -1,3 +1,4 @@
+import { useMediaQuery } from 'react-responsive';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Button } from 'antd';
 import ImageCard from './ImageCard';
@@ -21,6 +22,8 @@ const ProjectPage = ({ projectData }: Props) => {
     useEmblaNavigation(emblaApi);
   const selectedSnap = useEmblaSelectedSnap(emblaApi);
 
+  const isTabletOrDesktop = useMediaQuery({ minWidth: 768 });
+
   const getPageContentInfo = (index: number) => {
     const page = pages?.[index];
     if (!page || index !== selectedSnap) return null;
@@ -38,17 +41,13 @@ const ProjectPage = ({ projectData }: Props) => {
     return (
       <div
         style={{
-          height: 'auto',
-          width: '100%',
-          marginTop: '1rem',
-          userSelect: 'none',
-          display: 'flex',
-          gap: '1rem',
+          ...styles.pageContentInfo,
+          flexDirection: isTabletOrDesktop ? 'row' : 'column',
         }}
       >
-        <span style={{ flex: '3.5', fontSize: '1.25rem', fontWeight: 'bold' }}>{header}</span>
-        <span style={{ flex: '1' }} />
-        <span style={{ flex: '3', fontSize: '0.875rem' }}>
+        <span style={styles.pageHeader}>{header}</span>
+        <span style={styles.pageSpacer} />
+        <span style={styles.pageMessage}>
           {index === 0 && <span style={{ fontWeight: '700' }}>GOAL</span>}
           {message
             ? message.split(/\n+/).map((para, i) => (
@@ -59,15 +58,7 @@ const ProjectPage = ({ projectData }: Props) => {
             : null}
         </span>
         {index === 0 && (
-          <span
-            style={{
-              flex: '1',
-              fontSize: '0.875rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.25rem',
-            }}
-          >
+          <span style={styles.pageTechstack}>
             <span style={{ fontWeight: '700' }}>TECHSTACK</span>
             {projectData.tags.join(', ')}
           </span>
@@ -77,7 +68,13 @@ const ProjectPage = ({ projectData }: Props) => {
   };
 
   return (
-    <div style={{ ...styles.container, borderTop: `1px solid red` }}>
+    <div
+      style={{
+        ...styles.container,
+        borderTop: `1px solid red`,
+        height: isTabletOrDesktop ? '100vmin' : '100vh',
+      }}
+    >
       <div style={styles.carouselWrapper}>
         <div ref={emblaRef}>
           <div style={styles.slidesTrack}>
