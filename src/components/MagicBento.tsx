@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import type { ReactNode, CSSProperties, RefObject } from 'react';
 import { gsap } from 'gsap';
-import './MagicBento.css';
+import { base, darkTheme, lightTheme, buildCardStyle } from './MagicBento.css.tsx';
 
 export interface BentoItem {
   title: string;
@@ -21,7 +21,7 @@ interface ParticleCardProps {
 }
 
 interface GlobalSpotlightProps {
-  gridRef: RefObject<HTMLDivElement>;
+  gridRef: RefObject<HTMLDivElement | null>;
   disableAnimations?: boolean;
   enabled?: boolean;
   spotlightRadius?: number;
@@ -30,7 +30,7 @@ interface GlobalSpotlightProps {
 
 interface BentoCardGridProps {
   children: ReactNode;
-  gridRef: RefObject<HTMLDivElement>;
+  gridRef: RefObject<HTMLDivElement | null>;
 }
 
 export interface MagicBentoProps {
@@ -50,6 +50,7 @@ export interface MagicBentoProps {
 const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = '212, 160, 23';
+const LIGHT_GLOW_COLOR = '195, 45, 20';
 const MOBILE_BREAKPOINT = 768;
 
 const createParticleElement = (
@@ -133,7 +134,9 @@ const ParticleCard = ({
         opacity: 0,
         duration: 0.3,
         ease: 'back.in(1.7)',
-        onComplete: () => particle.parentNode?.removeChild(particle),
+        onComplete: () => {
+          particle.parentNode?.removeChild(particle);
+        },
       });
     });
     particlesRef.current = [];
@@ -433,6 +436,19 @@ const useMobileDetection = () => {
   return isMobile;
 };
 
+const useThemeDetection = () => {
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme-preference');
+    return saved !== null ? saved === 'dark' : true;
+  });
+  useEffect(() => {
+    const handler = (e: Event) => setIsDark((e as CustomEvent<boolean>).detail);
+    window.addEventListener('theme-change', handler);
+    return () => window.removeEventListener('theme-change', handler);
+  }, []);
+  return isDark;
+};
+
 const MagicBento = ({
   items,
   enableStars = true,
@@ -448,35 +464,37 @@ const MagicBento = ({
 }: MagicBentoProps) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
+  const isDark = useThemeDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+  const theme = isDark ? darkTheme : lightTheme;
+  const effectiveGlowColor = isDark ? glowColor : LIGHT_GLOW_COLOR;
 
   return (
-    <>
+    <div data-theme={isDark ? 'dark' : 'light'}>
       {enableSpotlight && (
         <GlobalSpotlight
           gridRef={gridRef}
           disableAnimations={shouldDisableAnimations}
           enabled={enableSpotlight}
           spotlightRadius={spotlightRadius}
-          glowColor={glowColor}
+          glowColor={effectiveGlowColor}
         />
       )}
       <BentoCardGrid gridRef={gridRef}>
         {items.map((item, index) => {
           const baseClassName = `magic-bento-card ${enableBorderGlow ? 'magic-bento-card--border-glow' : ''}`;
-          const cardStyle = {
-            backgroundColor: '#120F17',
-            '--glow-color': glowColor,
-          } as CSSProperties;
+          const cardStyle = buildCardStyle(theme, effectiveGlowColor);
 
           const cardContent = (
             <>
-              <div className="magic-bento-card__header">
-                <div className="magic-bento-card__label">{item.title}</div>
+              <div className="magic-bento-card__header" style={base.header}>
+                <div className="magic-bento-card__label" style={base.label}>
+                  {item.title}
+                </div>
               </div>
-              <div className="magic-bento-card__tags">
+              <div className="magic-bento-card__tags" style={base.tags}>
                 {item.skills.map(skill => (
-                  <span key={skill} className="magic-bento-tag">
+                  <span key={skill} className="magic-bento-tag" style={base.tag}>
                     {skill}
                   </span>
                 ))}
@@ -492,7 +510,7 @@ const MagicBento = ({
                 style={cardStyle}
                 disableAnimations={shouldDisableAnimations}
                 particleCount={particleCount}
-                glowColor={glowColor}
+                glowColor={effectiveGlowColor}
                 enableTilt={enableTilt}
                 clickEffect={clickEffect}
                 enableMagnetism={enableMagnetism}
@@ -509,7 +527,7 @@ const MagicBento = ({
           );
         })}
       </BentoCardGrid>
-    </>
+    </div>
   );
 };
 

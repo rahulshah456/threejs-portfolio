@@ -83,3 +83,173 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   border-width: 2px;
 }
+
+/* === MagicBento ===
+   Critical CSS: structural sizing, pseudo-classes, pseudo-elements, responsive.
+   Colors are set as CSS custom properties on the card element (inline, in MagicBento.tsx)
+   and consumed here via var(). See MagicBento.css.tsx for the palette values.
+*/
+
+.card-grid {
+  display: grid;
+  gap: 0.75em;
+  padding: 0.75em;
+  width: 100%;
+  max-width: 960px;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+}
+
+.bento-section {
+  position: relative;
+  user-select: none;
+}
+
+.magic-bento-card {
+  min-height: 160px;
+  padding: 1.5em;
+  border-radius: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  /* glow effect vars — updated by GlobalSpotlight JS */
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 200px;
+}
+
+.magic-bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-hover-shadow, 0 8px 25px rgba(0, 0, 0, 0.3));
+}
+
+.magic-bento-card--border-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 6px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-accent-rgb, 212, 160, 23), calc(var(--glow-intensity) * 0.8)) 0%,
+    rgba(var(--glow-accent-rgb, 212, 160, 23), calc(var(--glow-intensity) * 0.4)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.magic-bento-card--border-glow:hover {
+  box-shadow: var(
+    --card-glow-shadow,
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(212, 160, 23, 0.15)
+  );
+}
+
+.magic-bento-card__header {
+  color: var(--card-text);
+}
+
+.magic-bento-card__label {
+  font-size: 0.65rem;
+  color: var(--label-color);
+}
+
+.magic-bento-card__tags {
+  gap: 0.4rem;
+}
+
+.magic-bento-tag {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-color);
+}
+
+.magic-bento-tag:hover {
+  background: var(--tag-bg-hover) !important;
+  border-color: var(--tag-border-hover) !important;
+  color: var(--tag-text-hover) !important;
+}
+
+.particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: rgba(var(--glow-accent-rgb, 212, 160, 23), 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.global-spotlight {
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  z-index: 200 !important;
+  pointer-events: none;
+}
+
+@media (max-width: 599px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0.5em;
+  }
+  .magic-bento-card {
+    min-height: 140px;
+  }
+}
+
+@media (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1080px;
+    font-size: 1.41rem;
+    gap: 0.9em;
+    padding: 0.9em;
+  }
+  .magic-bento-card {
+    min-height: 180px;
+    padding: 1.7em;
+    border-radius: 22px;
+  }
+  .magic-bento-card__label {
+    font-size: 0.74rem;
+  }
+  .magic-bento-card__tags {
+    gap: 0.5rem;
+  }
+  .magic-bento-tag {
+    font-size: 0.82rem;
+    padding: 0.29rem 0.75rem;
+  }
+  .magic-bento-card:nth-child(2) {
+    grid-column: span 2;
+  }
+  .magic-bento-card:nth-child(6) {
+    grid-column: 1 / -1;
+  }
+}
