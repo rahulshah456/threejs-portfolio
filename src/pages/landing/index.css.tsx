@@ -11,16 +11,17 @@ const styles: CSSInterface = {
     pointerEvents: 'none',
   },
   name: {
-    fontSize: 'clamp(3rem, 6vw, 8rem)',
+    fontSize: 'clamp(8rem, 11vw, 16rem)',
     fontWeight: '900',
-    fontFamily: 'Valorax',
+    // fontFamily: 'Valorax',
     userSelect: 'none',
     opacity: 0,
   },
   title: {
-    fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)',
+    fontSize: 'clamp(1rem, 2vw, 3rem)',
     fontWeight: '300',
     userSelect: 'none',
+    marginTop: '-1.5rem',
     opacity: 0,
   },
 };

@@ -15,6 +15,7 @@ const styles: CSSInterface = {
     maxWidth: '1400px',
     display: 'flex',
     flexDirection: 'column' as const,
+    gap: 'clamp(1.5rem, 3vw, 2.5rem)',
     padding: 'clamp(2rem, 4vw, 4rem)',
     position: 'relative' as const,
     zIndex: 2,
@@ -27,7 +28,7 @@ const styles: CSSInterface = {
   },
   statement: {
     display: 'inline-block',
-    fontSize: 'clamp(2rem, 5vw, 5rem)',
+    fontSize: 'clamp(1.8rem, 3.6vw, 3.6rem)',
     fontWeight: '300',
     color: 'rgba(255, 255, 255, 0.72)',
   },

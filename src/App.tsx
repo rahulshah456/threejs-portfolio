@@ -7,6 +7,7 @@ import ScrollWatcher from './components/ScrollWatcher';
 import About from './pages/about/About';
 import Home from './pages/home/Home';
 import ProjectPage from './pages/project/ProjectPage';
+import ExpertisePage from './pages/expertise/ExpertisePage';
 import { useProjectsData } from './hooks/useProjectsData';
 import { useProjectStore } from './store/projectStore';
 import LandingPage from './pages/landing/LandingPage';
@@ -36,14 +37,17 @@ const ProjectDataLoader = () => {
 const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
   const isPlaying = usePlayMode(s => s.isPlaying);
-  const pages = 5 + projects.length;
+  // +1 page for ExpertisePage (after the Expertise SectionHeader)
+  const pages = 6 + projects.length;
+  // Page index where the Expertise SectionHeader begins
+  const expertiseStart = 3 + projects.length;
 
   return (
     <>
       <Home />
       {!isPlaying && (
         <ScrollControls pages={pages} damping={0.1}>
-          <ScrollWatcher pages={pages} />
+          <ScrollWatcher pages={pages} expertiseStart={expertiseStart} />
           <Scroll html>
             <LandingPage />
             <About />
@@ -55,6 +59,7 @@ const SceneContent = () => {
                 <ProjectPage key={project.id} projectData={project} />
               ))}
             <SectionHeader title="Expertise" />
+            <ExpertisePage />
             <SectionHeader title="Contact Me" />
           </Scroll>
         </ScrollControls>

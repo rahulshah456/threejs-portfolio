@@ -74,15 +74,6 @@ const About = () => {
         />
         <img
           ref={el => {
-            imagesRef.current['india'] = el;
-          }}
-          src={`${baseUrl}/india.webp`}
-          alt="India"
-          style={styles.image}
-          data-image="india"
-        />
-        <img
-          ref={el => {
             imagesRef.current['wsp'] = el;
           }}
           src={`${baseUrl}/wsp.jpg`}
@@ -116,21 +107,20 @@ const About = () => {
         </span>
         <span style={styles.statement}>
           <span style={styles.highlight} data-label="designer-dev">
-            Full-Stack designer and developer
+            Full-Stack engineer
           </span>{' '}
-          based in{' '}
-          <span style={styles.highlight} data-label="india">
-            India
+          crafting scalable, AI-augmented systems — RAG pipelines, .NET APIs, and production-grade{' '}
+          <span style={styles.highlight} data-label="startups">
+            React interfaces
           </span>
-          . Currently working at{' '}
+          .
+        </span>
+        <span style={styles.statement}>
+          Currently shipping at{' '}
           <span style={styles.highlight} data-label="wsp">
             WSP
-          </span>{' '}
-          and worked with Founders from{' '}
-          <span style={styles.highlight} data-label="startups">
-            early stage startups
-          </span>{' '}
-          like{' '}
+          </span>
+          , and previously collaborated with Founders from early stage startups like{' '}
           <span style={styles.highlight} data-label="primebook">
             PrimeBook
           </span>

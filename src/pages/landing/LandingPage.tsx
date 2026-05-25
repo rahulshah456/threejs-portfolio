@@ -6,7 +6,7 @@ import styles from './index.css.tsx';
 
 gsap.registerPlugin(SplitText);
 
-const MAIN_NAME = 'Rahul Kumar Shah';
+const MAIN_NAME = 'Rahul Shah';
 const TITLE_LINE_1 = 'Full Stack Developer';
 const TITLE_LINE_2 = '4+ Years Experience';
 
