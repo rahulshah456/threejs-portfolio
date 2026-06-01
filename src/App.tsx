@@ -15,6 +15,7 @@ import SectionHeader from './pages/section-header/SectionHeader';
 import PlayButton from './components/city/PlayButton';
 import { usePlayMode } from './store/playModeStore';
 import { ThemeProvider, useTheme } from './components/custom-hooks/useTheme';
+import TubesCursorEffect from './components/TubesCursorEffect';
 
 const queryClient = new QueryClient();
 
@@ -101,6 +102,7 @@ const App = () => {
           >
             <SceneContent />
           </Canvas>
+          <TubesCursorEffect />
           <Button
             onClick={toggleTheme}
             style={{
