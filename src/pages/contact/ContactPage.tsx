@@ -1,6 +1,6 @@
 import { Suspense, useState, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, Bounds } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 import LaptopModel, { CLOSED_FRACTION } from '../../components/LaptopModel';
 import type { LaptopDebugState } from '../../components/LaptopModel';
 import { usePlayMode } from '../../store/playModeStore';
@@ -42,13 +42,11 @@ const ContactPage = () => {
           <ambientLight intensity={0.6} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
           <Suspense fallback={null}>
-            <Bounds fit clip observe margin={1.2}>
-              <LaptopModel
-                onTick={DEBUG ? setDebugState : undefined}
-                onSeek={DEBUG ? handleSeekRegister : undefined}
-                onTogglePlay={DEBUG ? handleToggleRegister : undefined}
-              />
-            </Bounds>
+            <LaptopModel
+              onTick={DEBUG ? setDebugState : undefined}
+              onSeek={DEBUG ? handleSeekRegister : undefined}
+              onTogglePlay={DEBUG ? handleToggleRegister : undefined}
+            />
             <Environment preset="city" />
           </Suspense>
         </Canvas>
