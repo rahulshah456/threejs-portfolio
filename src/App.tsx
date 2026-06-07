@@ -16,6 +16,7 @@ import PlayButton from './components/city/PlayButton';
 import { usePlayMode } from './store/playModeStore';
 import { ThemeProvider, useTheme } from './components/custom-hooks/useTheme';
 import TubesCursorEffect from './components/TubesCursorEffect';
+import ContactPage from './pages/contact/ContactPage';
 
 const queryClient = new QueryClient();
 
@@ -61,7 +62,7 @@ const SceneContent = () => {
               ))}
             <SectionHeader title="Expertise" />
             <ExpertisePage />
-            <SectionHeader title="Contact Me" />
+            <ContactPage />
           </Scroll>
         </ScrollControls>
       )}
@@ -89,12 +90,18 @@ const App = () => {
 
   return (
     <ConfigProvider
-      theme={{ algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm }}
+      theme={{
+        algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+        token: isDark ? {} : { colorBgBase: '#e8ddd4' },
+      }}
     >
       <QueryClientProvider client={queryClient}>
         <ThemedBody>
           <ProjectDataLoader />
-          <div className="page-reveal-overlay" style={{ background: isDark ? '#000' : '#fff' }} />
+          <div
+            className="page-reveal-overlay"
+            style={{ background: isDark ? '#000' : '#e8ddd4' }}
+          />
           <Canvas
             style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}
             shadows

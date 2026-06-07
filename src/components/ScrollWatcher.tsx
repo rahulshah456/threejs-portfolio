@@ -12,8 +12,12 @@ const ScrollWatcher = ({ pages, expertiseStart }: ScrollWatcherProps) => {
   const scroll = useScroll();
   const setCityOpacity = usePlayMode(s => s.setCityOpacity);
   const setExpertiseOpacity = usePlayMode(s => s.setExpertiseOpacity);
+  const setAboutVisible = usePlayMode(s => s.setAboutVisible);
+  const setContactVisible = usePlayMode(s => s.setContactVisible);
   const prevCity = useRef(1);
   const prevExpertise = useRef(0);
+  const prevAbout = useRef(false);
+  const prevContact = useRef(false);
 
   useFrame(() => {
     const offset = scroll.offset;
@@ -51,6 +55,23 @@ const ScrollWatcher = ({ pages, expertiseStart }: ScrollWatcherProps) => {
     if (Math.abs(expertiseOpacity - prevExpertise.current) > 0.001) {
       prevExpertise.current = expertiseOpacity;
       setExpertiseOpacity(expertiseOpacity);
+    }
+
+    // --- About page visibility ---
+    const aboutStart = 0.8 / pages;
+    const aboutEnd = 2.2 / pages;
+    const isAbout = offset >= aboutStart && offset <= aboutEnd;
+    if (isAbout !== prevAbout.current) {
+      prevAbout.current = isAbout;
+      setAboutVisible(isAbout);
+    }
+
+    // --- Contact Me page visibility ---
+    const contactStart = (expertiseStart + 1.8) / pages;
+    const isContact = offset >= contactStart;
+    if (isContact !== prevContact.current) {
+      prevContact.current = isContact;
+      setContactVisible(isContact);
     }
   });
 

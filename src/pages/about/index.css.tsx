@@ -59,6 +59,31 @@ const styles: CSSInterface = {
     transform: 'scale(0.8)',
     objectFit: 'cover' as const,
   },
+  modelSection: {
+    position: 'relative' as const,
+    flex: 1,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  toggleButton: {
+    position: 'absolute' as const,
+    bottom: '2rem',
+    zIndex: 10,
+    padding: '0.5rem 1.4rem',
+    background: 'rgba(255, 255, 255, 0.08)',
+    color: '#fff',
+    border: '1px solid rgba(255, 255, 255, 0.22)',
+    borderRadius: '2rem',
+    cursor: 'pointer',
+    backdropFilter: 'blur(8px)',
+    fontSize: '0.8rem',
+    letterSpacing: '0.1em',
+    fontWeight: '500',
+    textTransform: 'uppercase' as const,
+  },
 };
 
 export default styles;
