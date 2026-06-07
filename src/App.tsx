@@ -39,9 +39,7 @@ const ProjectDataLoader = () => {
 const SceneContent = () => {
   const projects = useProjectStore(s => s.projects);
   const isPlaying = usePlayMode(s => s.isPlaying);
-  // +1 page for ExpertisePage (after the Expertise SectionHeader)
   const pages = 6 + projects.length;
-  // Page index where the Expertise SectionHeader begins
   const expertiseStart = 3 + projects.length;
 
   return (

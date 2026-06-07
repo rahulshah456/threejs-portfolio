@@ -1,26 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { useTheme } from './custom-hooks/useTheme';
 
-// Dark:  gold · red · blue      (vivid — stands out on dark bg)
-// Light: muted red · muted gold · blue  (softer — stands out on light bg)
 const DARK_COLORS = ['#ffc50f', '#ff0000', '#1677ff'] as const;
 const LIGHT_COLORS = ['#c23b22', '#d4a017', '#1677ff'] as const;
 
-// Faster lerps = snappier; shorter trail = angular, boxy feel
 const LERPS = [0.32, 0.19, 0.1] as const;
 const TRAIL = 20;
 const N = 3;
-const LINEWIDTH = 8; // pixels — Line2 shader handles actual pixel width
+const LINEWIDTH = 8;
 
-// Each tube is split into 4 opacity bands from tail → tip.
-// Each band is its own Line2 with a fixed lineMat.opacity so underlying
-// content (images, etc.) genuinely shows through the fading tail.
 const BAND_DEFS = [
   { start: 0, end: 5, opacity: 0.06 },
   { start: 4, end: 10, opacity: 0.22 },
@@ -39,9 +32,9 @@ interface BandState {
 
 interface TubeState {
   smoothed: THREE.Vector3;
-  ring: Float32Array; // TRAIL*3 ring storage
+  ring: Float32Array;
   head: number;
-  fullGpu: Float32Array; // TRAIL*3 ordered oldest→newest
+  fullGpu: Float32Array;
   bands: BandState[];
 }
 
@@ -63,8 +56,6 @@ function buildTubes(): TubeState[] {
         gpu[j * 3 + 2] = 10;
       }
       const lineGeo = new LineGeometry();
-      // Seed geometry with a separate copy so band.gpu is only ever touched
-      // inside useFrame, avoiding the React Compiler's "used in effect" warning.
       lineGeo.setPositions(new Float32Array(gpu));
       const lineMat = new LineMaterial({
         color: '#ffffff',
@@ -73,6 +64,8 @@ function buildTubes(): TubeState[] {
         transparent: true,
         depthTest: false,
         toneMapped: false,
+        // Additive blending gives the same glow as Bloom with zero extra render passes
+        blending: THREE.AdditiveBlending,
       });
       const line2 = new Line2(lineGeo, lineMat);
       return { start: def.start, pts, gpu, lineGeo, lineMat, line2 };
@@ -86,14 +79,10 @@ const TubesScene = () => {
   const colors = isDark ? DARK_COLORS : LIGHT_COLORS;
   const { size, scene } = useThree();
 
-  // Function-pointer refs — the compiler sees these as opaque refs, not mutable data.
-  // All Three.js objects live inside the scene effect closure, fully invisible to React.
   const tickRef = useRef<(cam: THREE.Camera) => void>(() => {});
   const setColorsRef = useRef<(c: readonly string[]) => void>(() => {});
   const setResolutionRef = useRef<(w: number, h: number) => void>(() => {});
 
-  // Build tubes, wire up tick + helpers, add to scene. All Three.js state is
-  // local to this closure — React Compiler cannot see or track it.
   useEffect(() => {
     const tubes = buildTubes();
     tubes.forEach(t => t.bands.forEach(b => scene.add(b.line2)));
@@ -152,24 +141,17 @@ const TubesScene = () => {
     };
   }, [scene]);
 
-  useEffect(() => {
-    setColorsRef.current(colors);
-  }, [colors]);
-  useEffect(() => {
-    setResolutionRef.current(size.width, size.height);
-  }, [size]);
+  useEffect(() => { setColorsRef.current(colors); }, [colors]);
+  useEffect(() => { setResolutionRef.current(size.width, size.height); }, [size]);
 
   useFrame(({ camera }) => tickRef.current(camera));
 
-  return (
-    <EffectComposer>
-      <Bloom intensity={1.5} luminanceThreshold={0.12} luminanceSmoothing={0.55} />
-    </EffectComposer>
-  );
+  return null;
 };
 
-// Overlay Canvas — transparent, pointer-events disabled, above all content.
-// antialias:false + dpr cap = big win on integrated Intel HD graphics.
+// Transparent fixed overlay — always above all HTML content.
+// No EffectComposer: AdditiveBlending on LineMaterial gives the same glow
+// with zero extra GPU render passes.
 const TubesCursorEffect = () => (
   <Canvas
     style={{

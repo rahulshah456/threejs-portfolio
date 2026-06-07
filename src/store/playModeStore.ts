@@ -6,13 +6,11 @@ interface PlayModeState {
   expertiseOpacity: number;
   isAboutVisible: boolean;
   isContactVisible: boolean;
-  isLaptopPlaying: boolean;
   togglePlay: () => void;
   setCityOpacity: (opacity: number) => void;
   setExpertiseOpacity: (opacity: number) => void;
   setAboutVisible: (visible: boolean) => void;
   setContactVisible: (visible: boolean) => void;
-  setLaptopPlaying: (playing: boolean) => void;
 }
 
 export const usePlayMode = create<PlayModeState>(set => ({
@@ -21,7 +19,6 @@ export const usePlayMode = create<PlayModeState>(set => ({
   expertiseOpacity: 0,
   isAboutVisible: false,
   isContactVisible: false,
-  isLaptopPlaying: false,
   togglePlay: () =>
     set(s => ({
       isPlaying: !s.isPlaying,
@@ -31,5 +28,4 @@ export const usePlayMode = create<PlayModeState>(set => ({
   setExpertiseOpacity: (opacity: number) => set({ expertiseOpacity: opacity }),
   setAboutVisible: (visible: boolean) => set({ isAboutVisible: visible }),
   setContactVisible: (visible: boolean) => set({ isContactVisible: visible }),
-  setLaptopPlaying: (playing: boolean) => set({ isLaptopPlaying: playing }),
 }));

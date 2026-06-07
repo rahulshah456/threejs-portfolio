@@ -39,7 +39,7 @@ const Home = () => {
     <>
       <color attach="background" args={[bgColor]} />
       <fog attach="fog" args={[sceneColor, 10, isPlaying ? 60 : 16]} />
-      <ambientLight intensity={4} />
+      <ambientLight intensity={1.5} />
       <spotLight position={[5, 5, 5]} intensity={20} angle={0.3} penumbra={0.1} castShadow />
       <pointLight position={[0, 6, 0]} intensity={0.5} />
       <City />

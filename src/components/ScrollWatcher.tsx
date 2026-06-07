@@ -25,17 +25,14 @@ const ScrollWatcher = ({ pages, expertiseStart }: ScrollWatcherProps) => {
     // --- City fade ---
     const cityFadeStart = 1.5 / pages;
     const cityFadeEnd = 2.8 / pages;
-    const cityT = Math.max(
-      0,
-      Math.min(1, (offset - cityFadeStart) / (cityFadeEnd - cityFadeStart))
-    );
+    const cityT = Math.max(0, Math.min(1, (offset - cityFadeStart) / (cityFadeEnd - cityFadeStart)));
     const cityOpacity = 1 - cityT;
     if (Math.abs(cityOpacity - prevCity.current) > 0.001) {
       prevCity.current = cityOpacity;
       setCityOpacity(cityOpacity);
     }
 
-    // --- Expertise spheres fade ---
+    // --- Expertise fade ---
     const expFadeInStart = (expertiseStart - 0.5) / pages;
     const expFadeInEnd = expertiseStart / pages;
     const expFadeOutStart = (expertiseStart + 2.0) / pages;
@@ -43,13 +40,8 @@ const ScrollWatcher = ({ pages, expertiseStart }: ScrollWatcherProps) => {
 
     let expertiseOpacity = 0;
     if (offset >= expFadeInStart && offset <= expFadeOutEnd) {
-      const fadeIn = Math.max(
-        0,
-        Math.min(1, (offset - expFadeInStart) / (expFadeInEnd - expFadeInStart))
-      );
-      const fadeOut =
-        1 -
-        Math.max(0, Math.min(1, (offset - expFadeOutStart) / (expFadeOutEnd - expFadeOutStart)));
+      const fadeIn = Math.max(0, Math.min(1, (offset - expFadeInStart) / (expFadeInEnd - expFadeInStart)));
+      const fadeOut = 1 - Math.max(0, Math.min(1, (offset - expFadeOutStart) / (expFadeOutEnd - expFadeOutStart)));
       expertiseOpacity = Math.min(fadeIn, fadeOut);
     }
     if (Math.abs(expertiseOpacity - prevExpertise.current) > 0.001) {
@@ -66,8 +58,8 @@ const ScrollWatcher = ({ pages, expertiseStart }: ScrollWatcherProps) => {
       setAboutVisible(isAbout);
     }
 
-    // --- Contact Me page visibility ---
-    const contactStart = (expertiseStart + 1.8) / pages;
+    // --- Contact page visibility ---
+    const contactStart = (expertiseStart + 2.0) / pages;
     const isContact = offset >= contactStart;
     if (isContact !== prevContact.current) {
       prevContact.current = isContact;
