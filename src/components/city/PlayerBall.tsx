@@ -1,19 +1,19 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Trail } from '@react-three/drei';
+import { Trail, useTexture } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import type { RapierRigidBody } from '@react-three/rapier';
 import * as THREE from 'three';
 import { usePlayMode } from '../../store/playModeStore';
 
 /* ---------- Tuning ---------- */
-const SPEED = 3;
-const SPEED_RUN = 7;
-const JUMP_IMPULSE = 5;
+const SPEED = 6;
+const SPEED_RUN = 14;
+const JUMP_IMPULSE = 10;
 const STEER_SPEED = 2.5;
 const CAM_DISTANCE = 9;
-const CAM_HEIGHT = 3.8;
-const CAM_LOOK_HEIGHT = 1.5;
+const CAM_HEIGHT = 2;
+const CAM_LOOK_HEIGHT = 1;
 const MOUSE_SENSITIVITY_X = 0.003;
 const MOUSE_SENSITIVITY_Y = 0.002;
 const VERTICAL_CLAMP_MIN = -0.3;
@@ -25,11 +25,24 @@ interface CameraRotation {
   vertical: number;
 }
 
-const PlayerBall = () => {
+const BASE_RADIUS = 0.075;
+
+interface PlayerBallProps {
+  meshRef: React.RefObject<THREE.Mesh | null>;
+  ballRadiusRef: React.MutableRefObject<number>;
+  ballPosRef: React.MutableRefObject<THREE.Vector3>;
+}
+
+const PlayerBall = ({ meshRef, ballRadiusRef, ballPosRef }: PlayerBallProps) => {
   const rb = useRef<RapierRigidBody>(null!);
   const { camera } = useThree();
-  const keys = useRef({ w: false, a: false, d: false, shift: false });
-  const canJump = useRef(true);
+  const [diffuse, normal, rough] = useTexture([
+    '/assets/textures/coral_ground_02_diff_1k.jpg',
+    '/assets/textures/coral_ground_02_nor_gl_1k.jpg',
+    '/assets/textures/coral_ground_02_rough_1k.jpg',
+  ]);
+  const keys = useRef({ w: false, a: false, s: false, d: false, shift: false });
+  const jumpsLeft = useRef(2);
   const togglePlay = usePlayMode(s => s.togglePlay);
 
   /* Camera state */
@@ -41,7 +54,7 @@ const PlayerBall = () => {
   const facingAngle = useRef(0);
 
   const isMoving = useCallback(() => {
-    return keys.current.w;
+    return keys.current.w || keys.current.s;
   }, []);
 
   /* ---------- Mouse handlers ---------- */
@@ -80,14 +93,11 @@ const PlayerBall = () => {
         e.preventDefault();
         e.stopPropagation();
         const body = rb.current;
-        if (body && canJump.current) {
-          canJump.current = false;
+        if (body && jumpsLeft.current > 0) {
+          jumpsLeft.current -= 1;
           const vel = body.linvel();
           body.setLinvel({ x: vel.x, y: JUMP_IMPULSE, z: vel.z }, true);
           body.wakeUp();
-          setTimeout(() => {
-            canJump.current = true;
-          }, 600);
         }
         return;
       }
@@ -132,28 +142,35 @@ const PlayerBall = () => {
 
   /* ---------- Frame loop ---------- */
   useFrame((_state, delta) => {
+    // Scale mesh; rotation comes naturally from Rapier's angular velocity (angularDamping=50 keeps it controlled)
+    if (meshRef.current) {
+      const s = ballRadiusRef.current / BASE_RADIUS;
+      meshRef.current.scale.setScalar(s);
+    }
+
     const body = rb.current;
     if (!body) return;
 
-    /* Steering: A/D rotate facing angle, W drives forward */
     if (keys.current.a) facingAngle.current += STEER_SPEED * delta;
     if (keys.current.d) facingAngle.current -= STEER_SPEED * delta;
 
     const vel = body.linvel();
-    if (keys.current.w) {
+    const pos = body.translation();
+    ballPosRef.current.set(pos.x, pos.y, pos.z);
+    // Reset double jump when near ground and falling/landed
+    if (pos.y < 0.3 && vel.y <= 0.1) jumpsLeft.current = 2;
+    if (keys.current.w || keys.current.s) {
       const spd = keys.current.shift ? SPEED_RUN : SPEED;
-      const vx = Math.sin(facingAngle.current) * spd;
-      const vz = Math.cos(facingAngle.current) * spd;
+      const dir = keys.current.s ? -1 : 1;
+      const vx = Math.sin(facingAngle.current) * spd * dir;
+      const vz = Math.cos(facingAngle.current) * spd * dir;
       body.setLinvel({ x: vx, y: vel.y, z: vz }, true);
     } else {
       body.setLinvel({ x: vel.x * 0.9, y: vel.y, z: vel.z * 0.9 }, true);
     }
 
-    /* Ball position */
-    const pos = body.translation();
     const ballPos = new THREE.Vector3(pos.x, pos.y, pos.z);
 
-    /* Track facing angle from velocity (only when no steering input) */
     if (!keys.current.a && !keys.current.d) {
       const horizVel = new THREE.Vector2(vel.x, vel.z);
       if (horizVel.lengthSq() > 0.05) {
@@ -165,24 +182,19 @@ const PlayerBall = () => {
       }
     }
 
-    /* Determine orbit angle */
     const moving = isMoving();
     let orbitH: number;
     let orbitV: number;
 
     if (isMouseActive.current) {
-      // Mouse orbit mode: use mouse-set rotation
       orbitH = cameraRotation.current.horizontal;
       orbitV = cameraRotation.current.vertical;
     } else if (moving) {
-      // Moving: camera behind ball facing direction
-      // Reset mouse rotation toward facing direction
       cameraRotation.current.horizontal = facingAngle.current + Math.PI;
       cameraRotation.current.vertical = -0.1;
       orbitH = facingAngle.current + Math.PI;
       orbitV = -0.1;
     } else {
-      // Idle + mouse released: transition back to behind-ball
       if (isTransitioningBack.current) {
         const targetH = facingAngle.current + Math.PI;
         let diffH = targetH - cameraRotation.current.horizontal;
@@ -201,7 +213,6 @@ const PlayerBall = () => {
       orbitV = cameraRotation.current.vertical;
     }
 
-    /* Calculate camera position from orbit angles */
     const offsetX = Math.sin(orbitH) * CAM_DISTANCE * Math.cos(orbitV);
     const offsetZ = Math.cos(orbitH) * CAM_DISTANCE * Math.cos(orbitV);
     const offsetY = CAM_HEIGHT + Math.sin(orbitV) * CAM_DISTANCE * 0.5;
@@ -214,7 +225,6 @@ const PlayerBall = () => {
 
     const idealLook = new THREE.Vector3(ballPos.x, ballPos.y + CAM_LOOK_HEIGHT, ballPos.z);
 
-    /* Smooth interpolation (same formula as reference) */
     const t = 1.0 - Math.pow(0.001, delta);
     currentCamPos.current.lerp(idealCam, t);
     currentLookAt.current.lerp(idealLook, t);
@@ -225,17 +235,18 @@ const PlayerBall = () => {
   });
 
   return (
-    <RigidBody ref={rb} position={[0, 2, 0]} colliders="ball" linearDamping={3} angularDamping={2}>
-      <Trail width={0.4} length={20} color={new THREE.Color('#ff3300')} attenuation={t => t * t}>
-        <mesh castShadow renderOrder={999}>
-          <sphereGeometry args={[0.0375, 16, 16]} />
+    <RigidBody ref={rb} position={[0, 2, 0]} colliders="ball" linearDamping={3} angularDamping={50}>
+      <Trail width={0.8} length={20} color={new THREE.Color('#ff3300')} attenuation={t => t * t}>
+        <mesh ref={meshRef} castShadow>
+          <sphereGeometry args={[BASE_RADIUS, 32, 32]} />
           <meshStandardMaterial
-            color="#ff2200"
-            emissive="#ff4400"
-            emissiveIntensity={1.2}
-            depthTest={false}
-            transparent
-            opacity={1}
+            map={diffuse}
+            normalMap={normal}
+            roughnessMap={rough}
+            emissive="#ff2200"
+            emissiveIntensity={0.25}
+            roughness={1}
+            metalness={0}
           />
         </mesh>
       </Trail>

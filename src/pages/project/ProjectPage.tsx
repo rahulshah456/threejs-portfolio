@@ -1,6 +1,5 @@
 import { useMediaQuery } from 'react-responsive';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Button } from 'antd';
 import ImageCard from './ImageCard';
 import { useEmblaNavigation } from '../../components/custom-hooks/useEmblaNavigation';
 import { useEmblaSelectedSnap } from '../../components/custom-hooks/useEmblaSelectedSnap';
@@ -87,20 +86,20 @@ const ProjectPage = ({ projectData }: Props) => {
           </div>
         </div>
 
-        <Button
+        <button
           style={styles.navigationButtonPrev}
           onClick={onPrevButtonClick}
           disabled={prevBtnDisabled}
         >
           ←
-        </Button>
-        <Button
+        </button>
+        <button
           style={styles.navigationButtonNext}
           onClick={onNextButtonClick}
           disabled={nextBtnDisabled}
         >
           →
-        </Button>
+        </button>
       </div>
     </div>
   );

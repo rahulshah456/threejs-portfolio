@@ -51,6 +51,7 @@ const City = () => {
   const groundRef = useRef<THREE.Mesh | null>(null);
   const gridRef = useRef<THREE.GridHelper | null>(null);
   const cityGroupRef = useRef<THREE.Group | null>(null);
+  const floorVisibleRef = useRef(true);
   const smokeMatRef = useRef<THREE.MeshToonMaterial | null>(null);
   const carMatRef = useRef<THREE.MeshToonMaterial | null>(null);
 
@@ -103,6 +104,7 @@ const City = () => {
 
       cube.position.x = b.posX;
       cube.position.z = b.posZ;
+      cube.position.y = b.scaleY / 2; // lift so base sits at y=0
       cube.castShadow = true;
       cube.receiveShadow = true;
 
@@ -141,7 +143,7 @@ const City = () => {
     city.add(ground);
 
     /* Grid */
-    const grid = new THREE.GridHelper(60, 120, DARK.gridCenter, DARK.gridLines);
+    const grid = new THREE.GridHelper(120, 240, DARK.gridCenter, DARK.gridLines);
     gridRef.current = grid;
     cityGroupRef.current = city;
     city.add(grid);
@@ -257,9 +259,10 @@ const City = () => {
     if (gridRef.current && cityGroupRef.current) {
       cityGroupRef.current.remove(gridRef.current);
       gridRef.current.geometry.dispose();
-      const newGrid = new THREE.GridHelper(60, 120, palette.gridCenter, palette.gridLines);
+      const newGrid = new THREE.GridHelper(120, 240, palette.gridCenter, palette.gridLines);
       gridRef.current = newGrid;
-      cityGroupRef.current.add(newGrid);
+      // Only add back to scene if not in play mode
+      if (floorVisibleRef.current) cityGroupRef.current.add(newGrid);
     }
 
     if (smokeMatRef.current) {
@@ -274,9 +277,16 @@ const City = () => {
   /* ------------------ Play Mode ------------------ */
   useEffect(() => {
     const city = cityRef.current;
+    floorVisibleRef.current = !isPlaying;
+
+    // Imperatively remove/add from scene so nothing bleeds through
     if (isPlaying) {
+      if (groundRef.current) city.remove(groundRef.current);
+      if (gridRef.current) city.remove(gridRef.current);
       gsap.to(city.rotation, { x: 0, y: 0, z: 0, duration: 0.5 });
     } else {
+      if (groundRef.current) city.add(groundRef.current);
+      if (gridRef.current) city.add(gridRef.current);
       camera.position.set(0, 2, 14);
       camera.lookAt(city.position);
     }
